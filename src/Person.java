@@ -7,18 +7,17 @@ class Person {
     Person() {
     }
 
-    boolean meets(Person person) {
+    void meets(Person person) {
         final int responsiveness = 5;
-        if(person.getViewA()) {
-            if (restResponsiveness > 0) {
-                this.viewA = true;
+        if(!this.viewA && person.getViewA()) {
+            if (restResponsiveness > 0 ) {
+                infectPerson();
             } else {
                 this.restResponsiveness = responsiveness;
             }
         }else {
             --restResponsiveness;
         }
-        return this.viewA;
     }
 
     boolean hasViewA() {
@@ -33,8 +32,9 @@ class Person {
         if(randomNum <= chance) this.viewA = true;
     }
 
-    void willBePatientZero() {
+    void infectPerson() {
         this.viewA = true;
+        //System.out.println("Person wird infiziert");
     }
 
     private boolean getViewA() {
