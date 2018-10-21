@@ -3,58 +3,61 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.DoubleToIntFunction;
 import java.util.stream.DoubleStream;
 
+//TODO komentare hinzufügen
 public class Main {
 
     public static void main(String[] args) {
         final boolean whichFunction = true; //true == dependent, false == independent
-        final int patientsZero = 3;
-        final int maxInfectionDays = 10000;
+        final int startPersonCountWithViewA = 3;
+        final int maxDaysToChangeView = 1000;
         final int peopleCount = 50 ;
 
         //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
         final long sampleSize = 1000000;
 
         DoubleToIntFunction func;
+        //TODO das aufwählen wälcher funtion geht bestimmt auch schönner
         if(whichFunction) {
-            func = e -> dependentOpinion(patientsZero, maxInfectionDays, peopleCount);
+            func = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount);
         }else {
-            func = e -> independentOpinion(maxInfectionDays, peopleCount);
+            func = e -> independentOpinion(maxDaysToChangeView, peopleCount);
         }
 
-        long startIn = System.nanoTime();
-        OptionalDouble aveDaysIn = DoubleStream.iterate(0, integer -> integer + 1)
+        long start = System.nanoTime();
+        OptionalDouble aveDays = DoubleStream.iterate(0, integer -> integer + 1)
                 .limit(sampleSize)
                 .parallel()
                 .mapToInt(func)
                 .average();
-        long endIn = System.nanoTime();
+        long end = System.nanoTime();
 
         if(whichFunction) {
             System.out.println("DependentOpinion test:");
         }else {
             System.out.println("IndependentOpinion test:");
         }
-        System.out.println("Durchschnittliche Tage bis alle infeziert wurden :" + aveDaysIn.getAsDouble() +
+        System.out.println("Durchschnittliche Tage bis alle die Ansicht A haben :" + aveDays.getAsDouble() +
                             "\nBei " + sampleSize + " durchläufen."+
-                            "\nDauer des Tests: " + ((endIn-startIn) / 1000000000) + " Sekunden" );
+                            "\nDauer des Tests: " + ((end-start) / 1000000000) + " Sekunden" );
     }
 
-    private static int dependentOpinion(int patientsZero, int maxInfectionDays, int peopleCount) {
+    //TODO Independent und dependent weiter zusammen fassen und Kommentare hinzufügen.
+
+    private static int dependentOpinion(int startPersonCountWithViewA, int maxDaysToChangeView, int peopleCount) {
         List<Person> people = generatePeople(peopleCount);
         List<Person> usedPeople = new ArrayList<>();
         Person dummy;
-        for(int i = 0; i < patientsZero; i++) {
+        for(int i = 0; i < startPersonCountWithViewA; i++) {
             dummy = people.remove(0);
-            dummy.infectPerson();
+            dummy.manifestViewA();
             people.add(peopleCount-1, dummy);
         }
 
         Collections.shuffle(people, new Random());
         Person per1, per2;
-        int infectedPeople = countInfected(people);
-        //System.out.println("Am Anfang gibt es " + infectedPeople + " Personen die infiziert sind");
+        int peopleWithViewA = countPeopleWithViewA(people);
         int passedDays = 0;
-        while ((infectedPeople < peopleCount) && (infectedPeople > 0)) {
+        while ((peopleWithViewA < peopleCount) && (peopleWithViewA > 0)) {
             Collections.shuffle(people, new Random());
             while (people.size() > 0) {
                 per1 = people.remove(0);
@@ -67,34 +70,31 @@ public class Main {
                 usedPeople.add(per2);
             }
             passedDays++;
-            if(passedDays >= maxInfectionDays) {
-                System.out.println("Max infection days reached");
+            if(passedDays >= maxDaysToChangeView) {
+                System.err.println("Max days reached to change view. Change probability or increase the max Day limit");
                 return passedDays;
             }
             people = new ArrayList<>(usedPeople);
             usedPeople.clear();
-            infectedPeople = countInfected(people);
-            //System.out.println("Es wurden bisher " + infectedPeople + " Personen infiziert.");
+            peopleWithViewA = countPeopleWithViewA(people);
         }
         return passedDays;
     }
 
     private static int independentOpinion(int maxInfectionDays, int peopleCount) {
         List<Person> people = generatePeople(peopleCount);
-        int infectedPeople = countInfected(people);
-        //System.out.println("Am Anfang gibt es " + infectedPeople + " Personen die infiziert sind");
+        int peopleWithViewA = countPeopleWithViewA(people);
         int passedDays = 0;
-        while((infectedPeople < peopleCount)) {
+        while((peopleWithViewA < peopleCount)) {
             for(Person p : people) {
-                if(getsSpontaneousInfected()) p.infectPerson();
+                if(getViewASpontaneous()) p.manifestViewA();
             }
             passedDays++;
             if(passedDays >= maxInfectionDays) {
-                System.out.println("Max infection days reached");
+                System.err.println("Max days reached to change view");
                 return passedDays;
             }
-            infectedPeople = countInfected(people);
-            //System.out.println("Es wurden bisher " + infectedPeople + " Personen infiziert.");
+            peopleWithViewA = countPeopleWithViewA(people);
         }
 
         return passedDays;
@@ -125,12 +125,21 @@ public class Main {
         return generateRandomProbability(encounterProbability);
     }
 
-    private static  boolean getsSpontaneousInfected () {
+    /**
+     * Decides if a person starts to belief in view A.
+     * @return Returns true if he starts to belief in view A, and false if not.
+     */
+    private static  boolean getViewASpontaneous () {
         //2,23% scheint ein guter wert zu sein
-        double infectionProbability = 0.0223;
-        return generateRandomProbability(infectionProbability);
+        double changeViewProbability = 0.0223;
+        return generateRandomProbability(changeViewProbability);
     }
 
+    /**
+     * Is used to generate Random Probabilities.
+     * @param probability The chance that an event occurs. Has a range from 0 to 1.
+     * @return Returns true if the event will happen, false if not.
+     */
     private static boolean generateRandomProbability(double probability) {
         double min = 0;
         double max = 1;
@@ -140,15 +149,13 @@ public class Main {
     }
 
     /**
-     * Counts the infected people in a given list.
-     * @param people The List, in which the infected people will be counted.
-     * @return Returns the number of infected people
+     * Counts the people with view A, in a given list.
+     * @param people The List, in which the people with view A will be counted.
+     * @return Returns the number of people, that belief in view A.
      */
-    private static int countInfected(List<Person> people) {
-        int count = 0;
-        for(Person p : people) {
-            if(p.hasViewA())count++;
-        }
-        return count;
+    private static int countPeopleWithViewA(List<Person> people) {
+        return (int) people.stream()
+                            .filter(person -> person.hasViewA())
+                            .count();
     }
 }
