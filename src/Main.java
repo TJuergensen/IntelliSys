@@ -1,16 +1,32 @@
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Stream;
 
 public class Main {
 
     public static void main(String[] args) {
         final int patientsZero = 1;
-        int maxInfectionDays = 100;
+        final int maxInfectionDays = 10000;
         final int peopleCount = 50 ;
-        System.out.println("Es hat " + dependentOpinion(patientsZero, maxInfectionDays, peopleCount) +
+
+        //Einzel test
+        /*System.out.println("Es hat " + dependentOpinion(patientsZero, maxInfectionDays, peopleCount) +
                 " Tage bei der Abhängigen infection gedauert");
         System.out.println("Es hat " + independentOpinion(maxInfectionDays, peopleCount) +
-                " Tage bei der Unabhängigen infection gedauert");
+                " Tage bei der Unabhängigen infection gedauert");*/
+
+
+        final int sampleSize = 10000000;
+        long start = System.nanoTime();
+        OptionalDouble aveDays = Stream.iterate(0, integer -> integer + 1)
+                .limit(sampleSize)
+                .parallel()
+                .mapToInt(e -> independentOpinion(maxInfectionDays, peopleCount))
+                .average();
+        long end = System.nanoTime();
+        System.out.println("Durchschnittliche Tage bis alle infeziert wurden :" + aveDays.getAsDouble() +
+                            "\nBei " + sampleSize + " durchläufen."+
+                            "Dauer des Tests: " + ((end-start) / 1000000000) + " Sekunden" );
     }
 
     private static int dependentOpinion(int patientsZero, int maxInfectionDays, int peopleCount) {
@@ -28,7 +44,7 @@ public class Main {
         int infectedPeople = countInfected(people);
         //System.out.println("Am Anfang gibt es " + infectedPeople + " Personen die infiziert sind");
         int passedDays = 0;
-        while ((infectedPeople < peopleCount) && (infectedPeople > 0) && (passedDays < maxInfectionDays)) {
+        while ((infectedPeople < peopleCount) && (infectedPeople > 0)) {
             Collections.shuffle(people, new Random());
             while (people.size() > 0) {
                 per1 = people.remove(0);
@@ -41,12 +57,15 @@ public class Main {
                 usedPeople.add(per2);
             }
             passedDays++;
+            if(passedDays >= maxInfectionDays) {
+                System.out.println("Max infection days reached");
+                return passedDays;
+            }
             people = new ArrayList<>(usedPeople);
             usedPeople.clear();
             infectedPeople = countInfected(people);
             //System.out.println("Es wurden bisher " + infectedPeople + " Personen infiziert.");
         }
-
         return passedDays;
     }
 
@@ -55,14 +74,19 @@ public class Main {
         int infectedPeople = countInfected(people);
         //System.out.println("Am Anfang gibt es " + infectedPeople + " Personen die infiziert sind");
         int passedDays = 0;
-        while((infectedPeople < peopleCount) && (passedDays < maxInfectionDays)) {
+        while((infectedPeople < peopleCount)) {
             for(Person p : people) {
                 if(getsSpontaneousInfected()) p.infectPerson();
             }
             passedDays++;
+            if(passedDays >= maxInfectionDays) {
+                System.out.println("Max infection days reached");
+                return passedDays;
+            }
             infectedPeople = countInfected(people);
             //System.out.println("Es wurden bisher " + infectedPeople + " Personen infiziert.");
         }
+
         return passedDays;
     }
 
@@ -91,7 +115,8 @@ public class Main {
     }
 
     private static  boolean getsSpontaneousInfected () {
-        double infectionProbability = 0.7;
+        //2,23% scheint ein guter wert zu sein
+        double infectionProbability = 0.0223;
         return generateRandomProbability(infectionProbability);
     }
 
