@@ -7,20 +7,21 @@ import java.util.stream.DoubleStream;
 public class Main {
 
     public static void main(String[] args) {
-        final boolean whichFunction = true; //true == dependent, false == independent
+        final boolean whichFunction = false; //true == dependent, false == independent
         final int startPersonCountWithViewA = 3;
-        final int maxDaysToChangeView = 1000;
+        final int maxDaysToChangeView = 10000;
         final int peopleCount = 50 ;
 
         //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
-        final long sampleSize = 1000000;
+        final long sampleSize = 100000;
+        DataContainer dataContainer = new DataContainer();
 
         DoubleToIntFunction func;
         //TODO das aufwählen wälcher funtion geht bestimmt auch schönner
         if(whichFunction) {
-            func = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount);
+            func = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount, dataContainer);
         }else {
-            func = e -> independentOpinion(maxDaysToChangeView, peopleCount);
+            func = e -> independentOpinion(maxDaysToChangeView, peopleCount, dataContainer);
         }
 
         long start = System.nanoTime();
@@ -39,11 +40,14 @@ public class Main {
         System.out.println("Durchschnittliche Tage bis alle die Ansicht A haben :" + aveDays.getAsDouble() +
                             "\nBei " + sampleSize + " durchläufen."+
                             "\nDauer des Tests: " + ((end-start) / 1000000000) + " Sekunden" );
+        Xchart xchart = new Xchart();
+        xchart.simpleChart(dataContainer);
     }
 
     //TODO Independent und dependent weiter zusammen fassen und Kommentare hinzufügen.
 
-    private static int dependentOpinion(int startPersonCountWithViewA, int maxDaysToChangeView, int peopleCount) {
+    private static int dependentOpinion(int startPersonCountWithViewA, int maxDaysToChangeView, int peopleCount,
+                                        DataContainer dataContainer) {
         List<Person> people = generatePeople(peopleCount);
         List<Person> usedPeople = new ArrayList<>();
         Person dummy;
@@ -81,7 +85,7 @@ public class Main {
         return passedDays;
     }
 
-    private static int independentOpinion(int maxInfectionDays, int peopleCount) {
+    private static int independentOpinion(int maxInfectionDays, int peopleCount, DataContainer dataContainer) {
         List<Person> people = generatePeople(peopleCount);
         int peopleWithViewA = countPeopleWithViewA(people);
         int passedDays = 0;
@@ -96,7 +100,7 @@ public class Main {
             }
             peopleWithViewA = countPeopleWithViewA(people);
         }
-
+        dataContainer.addInt(passedDays);
         return passedDays;
     }
 
