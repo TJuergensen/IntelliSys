@@ -1,32 +1,42 @@
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Stream;
+import java.util.function.DoubleToIntFunction;
+import java.util.stream.DoubleStream;
 
 public class Main {
 
     public static void main(String[] args) {
-        final int patientsZero = 1;
+        final boolean whichFunction = true; //true == dependent, false == independent
+        final int patientsZero = 3;
         final int maxInfectionDays = 10000;
         final int peopleCount = 50 ;
 
-        //Einzel test
-        /*System.out.println("Es hat " + dependentOpinion(patientsZero, maxInfectionDays, peopleCount) +
-                " Tage bei der Abhängigen infection gedauert");
-        System.out.println("Es hat " + independentOpinion(maxInfectionDays, peopleCount) +
-                " Tage bei der Unabhängigen infection gedauert");*/
+        //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
+        final long sampleSize = 1000000;
 
+        DoubleToIntFunction func;
+        if(whichFunction) {
+            func = e -> dependentOpinion(patientsZero, maxInfectionDays, peopleCount);
+        }else {
+            func = e -> independentOpinion(maxInfectionDays, peopleCount);
+        }
 
-        final int sampleSize = 10000000;
-        long start = System.nanoTime();
-        OptionalDouble aveDays = Stream.iterate(0, integer -> integer + 1)
+        long startIn = System.nanoTime();
+        OptionalDouble aveDaysIn = DoubleStream.iterate(0, integer -> integer + 1)
                 .limit(sampleSize)
                 .parallel()
-                .mapToInt(e -> independentOpinion(maxInfectionDays, peopleCount))
+                .mapToInt(func)
                 .average();
-        long end = System.nanoTime();
-        System.out.println("Durchschnittliche Tage bis alle infeziert wurden :" + aveDays.getAsDouble() +
+        long endIn = System.nanoTime();
+
+        if(whichFunction) {
+            System.out.println("DependentOpinion test:");
+        }else {
+            System.out.println("IndependentOpinion test:");
+        }
+        System.out.println("Durchschnittliche Tage bis alle infeziert wurden :" + aveDaysIn.getAsDouble() +
                             "\nBei " + sampleSize + " durchläufen."+
-                            "Dauer des Tests: " + ((end-start) / 1000000000) + " Sekunden" );
+                            "\nDauer des Tests: " + ((endIn-startIn) / 1000000000) + " Sekunden" );
     }
 
     private static int dependentOpinion(int patientsZero, int maxInfectionDays, int peopleCount) {
@@ -107,10 +117,11 @@ public class Main {
 
     /**
      * Decides if two people should meet today, through pseudo random numbers.
-     * @return Returns True if they should meet and vise versa.
+     * @return Returns True if they should meet and false if not.
      */
     private static boolean shouldTheyMeetToday() {
-        double encounterProbability = 0.7;
+        //8,5% scheint ein guter wert zu sein
+        double encounterProbability = 0.085;
         return generateRandomProbability(encounterProbability);
     }
 
