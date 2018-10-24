@@ -1,5 +1,5 @@
 import java.util.List;
-
+//ToDO JAVADOC!
 class DataContainer {
     private int data[]; //Jedes Experiment die Laufzeit in Tagen
     private int name[]; //TODO umbennenen und beschreiben
