@@ -13,16 +13,18 @@ public class Main {
         final int peopleCount = 50 ;
 
         //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
-        final int sampleSize = 4000000;
-        DataContainer dataContainer = new DataContainer(sampleSize);
+        final int sampleSize = 100;
+        DataContainer dataContainer = new DataContainer(sampleSize, maxDaysToChangeView);
         DoubleToIntFunction dependentFunc,independentFunc;
         dependentFunc = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount, dataContainer);
         independentFunc = e -> independentOpinion(maxDaysToChangeView, peopleCount, dataContainer);
 
         Xchart xchart = new Xchart();
+        System.out.println("Dependent");
         runSimulation(dependentFunc,sampleSize);
         xchart.simpleChart(dataContainer, "Dependent", sampleSize);
         dataContainer.clear();
+        System.out.println("Independent");
         runSimulation(independentFunc,sampleSize);
         xchart.simpleChart(dataContainer, "Independent", sampleSize);
     }
@@ -78,6 +80,7 @@ public class Main {
             people = new ArrayList<>(usedPeople);
             usedPeople.clear();
             peopleWithViewA = countPeopleWithViewA(people);
+            dataContainer.addViewCountOnDay(passedDays-1, peopleWithViewA);
         }
         dataContainer.addInt(passedDays);
         return passedDays;
@@ -97,6 +100,7 @@ public class Main {
                 return passedDays;
             }
             peopleWithViewA = countPeopleWithViewA(people);
+            dataContainer.addViewCountOnDay(passedDays-1,peopleWithViewA);
         }
         dataContainer.addInt(passedDays);
         return passedDays;
