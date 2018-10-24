@@ -4,16 +4,24 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.DoubleToIntFunction;
 import java.util.stream.DoubleStream;
 
-//TODO komentare hinzufügen
+/**
+ * Implementation of the given task https://lernraum.th-luebeck.de/mod/assign/view.php?id=95408
+ */
 public class Main {
 
+    //TODO programm mehr beschreiben
+    /**
+     *
+     * @param args Params, that aren't in use right now.
+     * @throws IOException Throws IOException, while saving a chart as SVG
+     */
     public static void main(String[] args) throws IOException {
         final int startPersonCountWithViewA = 3;
         final int maxDaysToChangeView = 10000;
         final int peopleCount = 50 ;
 
         //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
-        final int sampleSize = 100;
+        final int sampleSize = 1000000;
         DataContainer dataContainer = new DataContainer(sampleSize, maxDaysToChangeView);
         DoubleToIntFunction dependentFunc,independentFunc;
         dependentFunc = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount, dataContainer);
@@ -48,7 +56,7 @@ public class Main {
                 "\nDauer des Tests: " + ((end-start) / 1000000000) + " Sekunden" );
     }
 
-    //TODO Independent und dependent weiter zusammen fassen und Kommentare hinzufügen.
+    //TODO Independent und dependent weiter zusammen fassen(Am besten ween wir sicher sind, dass sie korrekt sind) und Kommentare hinzufügen.
 
     /***
      * //ToDO describe method

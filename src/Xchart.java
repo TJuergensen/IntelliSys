@@ -4,19 +4,26 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.*;
 
+/**
+ * Plotter class, that generates Charts with help from the chart library chart.
+ * Read more at https://knowm.org/open-source/xchart/
+ */
 class Xchart {
     private int array[];
-    private int length;
+
+    /**
+     * Constructor for Xchart
+     */
     Xchart() {
 
     }
 
     /***
-     * Used to compute given Data and create a Chart
+     * Used to compute given Data and create a Chart.
      * @param dataContainer Data structure containing relevant information for plotting
-     * @param name Name of the chart output ToDO VERIFIZIEREN! Stimmt diese info?
+     * @param name Name of the chart, which is used in creating a file for that chart
      * @param sampleSize Number of samples used
-     * @throws IOException
+     * @throws IOException Throws IOException, while saving a chart as SVG
      */
     void simpleChart(DataContainer dataContainer, String name, long sampleSize)throws IOException {
         //Group all data, with the day there finished as key
@@ -28,6 +35,8 @@ class Xchart {
         int lastInt = -1;
         int countIntPerDay = 1;
         int countIntTotal = 1;
+
+        //Iterate over the given data and allocate it for the chart creation
         for(Integer i : array) {
             if(i != lastInt) {
                 if(lastInt != -1) {
@@ -49,29 +58,39 @@ class Xchart {
         saveChart(chart, name + "_OverTime",sampleSize);
     }
 
-    /***
-     *
+    /**
+     * Saves a given chart, as SVG and autogenerats the name for that file.
      * @param chart Chart used
      * @param name name for the chart
      * @param sampleSize number of samples
-     * @throws IOException
+     * @throws IOException Throws IOException, while saving a chart as SVG
      */
-    void saveChart(Chart chart, String name, long sampleSize)throws IOException {
+    private void saveChart(Chart chart, String name, long sampleSize)throws IOException {
         name += "_SampleSize" + sampleSize + "_Date" +new Timestamp(System.currentTimeMillis()).toString();
         name = name.replaceAll(":","-");
         name = name.replaceAll("\\.","-");
-        //VectorGraphicsEncoder.saveVectorGraphic(chart, "C:\\Users\\julip\\Desktop\\IsysCharts\\" + name, VectorGraphicsEncoder.VectorGraphicsFormat.SVG);
-        VectorGraphicsEncoder.saveVectorGraphic(chart, "./src/output/" + name, VectorGraphicsEncoder.VectorGraphicsFormat.SVG);
 
+        String os = System.getProperty("os.name").toLowerCase();
+        String path = "";
+        //TODO für windows funktioniert es, aber der ordner output muss noch von hand angelegt werden am anfang. Den rest kann ich nicht überprüfen
+        if(os.contains("windows")){
+            path = "src\\output\\";
+        }else if(os.contains("nix")) {
+            path = "./src/output/";
+        }else if(os.contains("mac")) {
+            path = "./src/output/";
+        }
+        VectorGraphicsEncoder.saveVectorGraphic(chart, path + name, VectorGraphicsEncoder.VectorGraphicsFormat.SVG);
     }
 
-    /***
+    /**
      * Uses QuickSort for sorting an array
+     * @author http://www.java2novice.com/java-sorting-algorithms/quick-sort/ ,24.10.2018
      * @param inputArr the input to be sorted
      */
 
     private void sort(int[] inputArr) {
-
+        int length;
         if (inputArr == null || inputArr.length == 0) {
             return;
         }
@@ -81,8 +100,9 @@ class Xchart {
     }
 
 
-    /***
-     * QuickSort implementation. Source: //ToDO insert Source
+    /**
+     * QuickSort implementation.
+     * @author http://www.java2novice.com/java-sorting-algorithms/quick-sort/ ,24.10.2018
      * @param lowerIndex lower index param
      * @param higherIndex high index param
      */
@@ -94,7 +114,7 @@ class Xchart {
         int pivot = array[lowerIndex+(higherIndex-lowerIndex)/2];
         // Divide into two arrays
         while (i <= j) {
-            /**
+            /*
              * In each iteration, we will identify a number from left side which
              * is greater then the pivot value, and also we will identify a number
              * from right side which is less then the pivot value. Once the search
@@ -120,8 +140,9 @@ class Xchart {
             quickSort(i, higherIndex);
     }
 
-    /***
+    /**
      * Used by quickSort implementation. change i and j
+     * @author http://www.java2novice.com/java-sorting-algorithms/quick-sort/ ,24.10.2018
      * @param i index i to be swapped
      * @param j index j to be swapped
      */
