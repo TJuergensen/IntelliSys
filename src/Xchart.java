@@ -46,7 +46,9 @@ class Xchart {
         name += "_SampleSize" + sampleSize + "_Date" +new Timestamp(System.currentTimeMillis()).toString();
         name = name.replaceAll(":","-");
         name = name.replaceAll("\\.","-");
-        VectorGraphicsEncoder.saveVectorGraphic(chart, "C:\\Users\\julip\\Desktop\\IsysCharts\\" + name, VectorGraphicsEncoder.VectorGraphicsFormat.SVG);
+        //VectorGraphicsEncoder.saveVectorGraphic(chart, "C:\\Users\\julip\\Desktop\\IsysCharts\\" + name, VectorGraphicsEncoder.VectorGraphicsFormat.SVG);
+        VectorGraphicsEncoder.saveVectorGraphic(chart, "./src/output/" + name, VectorGraphicsEncoder.VectorGraphicsFormat.SVG);
+
     }
 
     private void sort(int[] inputArr) {
