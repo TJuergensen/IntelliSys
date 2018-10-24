@@ -1,12 +1,10 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DataContainer {
     List<Integer> data;
-    int pointer = 0;
     DataContainer() {
-        data = new ArrayList<>();
+        clear();
     }
 
     synchronized void addInt(int add) {
@@ -15,5 +13,9 @@ public class DataContainer {
 
     List<Integer> getDataContainer() {
         return this.data;
+    }
+
+    void clear() {
+        data = new ArrayList<>();
     }
 }

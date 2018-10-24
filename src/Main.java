@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.DoubleToIntFunction;
@@ -6,24 +7,27 @@ import java.util.stream.DoubleStream;
 //TODO komentare hinzufügen
 public class Main {
 
-    public static void main(String[] args) {
-        final boolean whichFunction = false; //true == dependent, false == independent
+    public static void main(String[] args) throws IOException {
         final int startPersonCountWithViewA = 3;
         final int maxDaysToChangeView = 10000;
         final int peopleCount = 50 ;
 
         //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
-        final long sampleSize = 100000;
+        final long sampleSize = 100;
         DataContainer dataContainer = new DataContainer();
+        DoubleToIntFunction dependentFunc,independentFunc;
+        dependentFunc = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount, dataContainer);
+        independentFunc = e -> independentOpinion(maxDaysToChangeView, peopleCount, dataContainer);
 
-        DoubleToIntFunction func;
-        //TODO das aufwählen wälcher funtion geht bestimmt auch schönner
-        if(whichFunction) {
-            func = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount, dataContainer);
-        }else {
-            func = e -> independentOpinion(maxDaysToChangeView, peopleCount, dataContainer);
-        }
+        Xchart xchart = new Xchart();
+        runSimulation(dependentFunc,sampleSize);
+        xchart.simpleChart(dataContainer, "Dependent");
+        dataContainer.clear();
+        runSimulation(independentFunc,sampleSize);
+        xchart.simpleChart(dataContainer, "Independent");
+    }
 
+    private static void runSimulation(DoubleToIntFunction func,long sampleSize) {
         long start = System.nanoTime();
         OptionalDouble aveDays = DoubleStream.iterate(0, integer -> integer + 1)
                 .limit(sampleSize)
@@ -32,16 +36,9 @@ public class Main {
                 .average();
         long end = System.nanoTime();
 
-        if(whichFunction) {
-            System.out.println("DependentOpinion test:");
-        }else {
-            System.out.println("IndependentOpinion test:");
-        }
         System.out.println("Durchschnittliche Tage bis alle die Ansicht A haben :" + aveDays.getAsDouble() +
-                            "\nBei " + sampleSize + " durchläufen."+
-                            "\nDauer des Tests: " + ((end-start) / 1000000000) + " Sekunden" );
-        Xchart xchart = new Xchart();
-        xchart.simpleChart(dataContainer);
+                "\nBei " + sampleSize + " durchläufen."+
+                "\nDauer des Tests: " + ((end-start) / 1000000000) + " Sekunden" );
     }
 
     //TODO Independent und dependent weiter zusammen fassen und Kommentare hinzufügen.
@@ -82,10 +79,11 @@ public class Main {
             usedPeople.clear();
             peopleWithViewA = countPeopleWithViewA(people);
         }
+        dataContainer.addInt(passedDays);
         return passedDays;
     }
 
-    private static int independentOpinion(int maxInfectionDays, int peopleCount, DataContainer dataContainer) {
+    private static int independentOpinion(int maxDaysToChangeView, int peopleCount, DataContainer dataContainer) {
         List<Person> people = generatePeople(peopleCount);
         int peopleWithViewA = countPeopleWithViewA(people);
         int passedDays = 0;
@@ -94,7 +92,7 @@ public class Main {
                 if(getViewASpontaneous()) p.manifestViewA();
             }
             passedDays++;
-            if(passedDays >= maxInfectionDays) {
+            if(passedDays >= maxDaysToChangeView) {
                 System.err.println("Max days reached to change view");
                 return passedDays;
             }
@@ -125,7 +123,7 @@ public class Main {
      */
     private static boolean shouldTheyMeetToday() {
         //8,5% scheint ein guter wert zu sein
-        double encounterProbability = 0.085;
+        final double encounterProbability = 0.085;
         return generateRandomProbability(encounterProbability);
     }
 
@@ -135,7 +133,7 @@ public class Main {
      */
     private static  boolean getViewASpontaneous () {
         //2,23% scheint ein guter wert zu sein
-        double changeViewProbability = 0.0223;
+        final double changeViewProbability = 0.0223;
         return generateRandomProbability(changeViewProbability);
     }
 
