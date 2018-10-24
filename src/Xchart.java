@@ -11,6 +11,13 @@ class Xchart {
 
     }
 
+    /***
+     * Used to compute given Data and create a Chart
+     * @param dataContainer Data structure containing relevant information for plotting
+     * @param name Name of the chart output ToDO VERIFIZIEREN! Stimmt diese info?
+     * @param sampleSize Number of samples used
+     * @throws IOException
+     */
     void simpleChart(DataContainer dataContainer, String name, long sampleSize)throws IOException {
         //Group all data, with the day there finished as key
         array = dataContainer.getDataContainer();
@@ -42,6 +49,13 @@ class Xchart {
         saveChart(chart, name + "_OverTime",sampleSize);
     }
 
+    /***
+     *
+     * @param chart Chart used
+     * @param name name for the chart
+     * @param sampleSize number of samples
+     * @throws IOException
+     */
     void saveChart(Chart chart, String name, long sampleSize)throws IOException {
         name += "_SampleSize" + sampleSize + "_Date" +new Timestamp(System.currentTimeMillis()).toString();
         name = name.replaceAll(":","-");
@@ -50,6 +64,11 @@ class Xchart {
         VectorGraphicsEncoder.saveVectorGraphic(chart, "./src/output/" + name, VectorGraphicsEncoder.VectorGraphicsFormat.SVG);
 
     }
+
+    /***
+     * Uses QuickSort for sorting an array
+     * @param inputArr the input to be sorted
+     */
 
     private void sort(int[] inputArr) {
 
@@ -61,6 +80,12 @@ class Xchart {
         quickSort(0, length - 1);
     }
 
+
+    /***
+     * QuickSort implementation. Source: //ToDO insert Source
+     * @param lowerIndex lower index param
+     * @param higherIndex high index param
+     */
     private void quickSort(int lowerIndex, int higherIndex) {
 
         int i = lowerIndex;
@@ -95,6 +120,11 @@ class Xchart {
             quickSort(i, higherIndex);
     }
 
+    /***
+     * Used by quickSort implementation. change i and j
+     * @param i index i to be swapped
+     * @param j index j to be swapped
+     */
     private void exchangeNumbers(int i, int j) {
         int temp = array[i];
         array[i] = array[j];

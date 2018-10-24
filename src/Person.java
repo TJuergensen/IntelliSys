@@ -31,7 +31,7 @@ class Person {
     }
 
     /**
-     * Gets the Viewpoint to A from the person.
+     * Gets the Viewpoint to A from the person. Used as a Getter
      * @return Returns true if the person beliefs in point A and vise versa
      */
     boolean hasViewA() {
@@ -39,7 +39,7 @@ class Person {
     }
 
     /**
-     * Manifests the view A in the person.
+     * Manifests the view A in the person. Used as a setter
      */
     void manifestViewA() {
         this.viewA = true;

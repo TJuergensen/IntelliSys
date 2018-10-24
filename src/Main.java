@@ -29,6 +29,11 @@ public class Main {
         xchart.simpleChart(dataContainer, "Independent", sampleSize);
     }
 
+    /***
+     * runs the simulation. Uses Optional Doubles to enable multithreading. Calculates average of each simulation
+     * @param func function to be used; can be dependend or independend
+     * @param sampleSize number of samples used
+     */
     private static void runSimulation(DoubleToIntFunction func,long sampleSize) {
         long start = System.nanoTime();
         OptionalDouble aveDays = DoubleStream.iterate(0, integer -> integer + 1)
@@ -45,6 +50,14 @@ public class Main {
 
     //TODO Independent und dependent weiter zusammen fassen und Kommentare hinzufügen.
 
+    /***
+     * //ToDO describe method
+     * @param startPersonCountWithViewA The number of People with view A on day 0
+     * @param maxDaysToChangeView Maximum number of days to run simulation
+     * @param peopleCount total ammount of participating people
+     * @param dataContainer Data structure holding calculated information
+     * @return Number of People with view A on last day (after simulation ends)
+     */
     private static int dependentOpinion(int startPersonCountWithViewA, int maxDaysToChangeView, int peopleCount,
                                         DataContainer dataContainer) {
         List<Person> people = generatePeople(peopleCount);
@@ -86,6 +99,14 @@ public class Main {
         return passedDays;
     }
 
+
+    /***
+     * //ToDO describe method, insert maxDays
+     * @param maxDaysToChangeView  The number of People with view A on day 0
+     * @param peopleCount total ammount of participating people
+     * @param dataContainer Data structure holding calculated information
+     * @return Number of People with view A on last day (after simulation ends)
+     */
     private static int independentOpinion(int maxDaysToChangeView, int peopleCount, DataContainer dataContainer) {
         List<Person> people = generatePeople(peopleCount);
         int peopleWithViewA = countPeopleWithViewA(people);
