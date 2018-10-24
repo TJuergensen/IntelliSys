@@ -1,21 +1,23 @@
-import java.util.ArrayList;
-import java.util.List;
 
-public class DataContainer {
-    List<Integer> data;
-    DataContainer() {
+class DataContainer {
+    private int data[];
+    private int pointer;
+    private int dataSize;
+    DataContainer(int dataSize) {
+        this.dataSize = dataSize;
         clear();
     }
 
     synchronized void addInt(int add) {
-        data.add(add);
+        data[pointer++] = add;
     }
 
-    List<Integer> getDataContainer() {
+    int[] getDataContainer() {
         return this.data;
     }
 
     void clear() {
-        data = new ArrayList<>();
+        data = new int[dataSize];
+        pointer = 0;
     }
 }

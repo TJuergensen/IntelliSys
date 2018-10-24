@@ -1,74 +1,55 @@
 import org.knowm.xchart.*;
 import org.knowm.xchart.internal.chartpart.Chart;
-
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.stream.Stream;
 
-import static java.util.Map.Entry.comparingByValue;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toMap;
-
-public class Xchart {
+class Xchart {
     private int array[];
     private int length;
     Xchart() {
 
     }
 
-    void simpleChart(DataContainer dataContainer, String name)throws IOException {
+    void simpleChart(DataContainer dataContainer, String name, long sampleSize)throws IOException {
         //Group all data, with the day there finished as key
-        Map<Integer, List<Integer>> groupedData = dataContainer.getDataContainer().stream()
-                                        .collect(groupingBy(Integer::intValue));
+        array = dataContainer.getDataContainer();
+        sort(array);
         List<Integer> xData = new ArrayList<>();
         List<Integer> yDataPerDay = new ArrayList<>();
         List<Integer> yDataSinceDayOne = new ArrayList<>();
-        List<Integer> xtest = new ArrayList();
-        xtest.add(1);
-        xtest.add(2);
-        xtest.add(3);
-        xtest.add(5);
-        xtest.add(8);
-        xtest.add(7);
-
-        List<Integer> ytest = new ArrayList();
-        ytest.add(1);
-        ytest.add(2);
-        ytest.add(2);
-        ytest.add(3);
-        ytest.add(2);
-        ytest.add(4);
-        int i = 0;
-        //TODO Überprüfen ob es auch mit sorterten maps zu fehlern bei kleinen datenmängen kommt
-
-        for (Map.Entry<Integer, List<Integer>> entry : groupedData.entrySet()) {
-            System.out.println(entry.getKey() + "key");
-            System.out.println(entry.getValue() + "values");
-            xData.add(entry.getKey());
-            yDataPerDay.add(entry.getValue().size());
-            i += entry.getValue().size();
-            yDataSinceDayOne.add(i);
+        int lastInt = -1;
+        int countIntPerDay = 1;
+        int countIntTotal = 1;
+        for(Integer i : array) {
+            if(i != lastInt) {
+                if(lastInt != -1) {
+                    xData.add(lastInt);
+                    yDataPerDay.add(countIntPerDay);
+                    yDataSinceDayOne.add(countIntTotal);
+                }
+                lastInt = i;
+                countIntPerDay = 1;
+            }else {
+                countIntPerDay++;
+            }
+            countIntTotal++;
         }
-
-        sort(xData);
         // Create Chart
-        /*XYChart chart = QuickChart.getChart("Samples finished", "Past Days", "Samples finished per Day", " ", xData, yDataPerDay);
-        saveChart(chart, name,i);
-        chart = QuickChart.getChart("Total Samples finished", "Past Days", "Total Samples finished per Time", " ", xData, yDataSinceDayOne);
-        saveChart(chart, name,i);*/
-        XYChart chart = QuickChart.getChart("Total Samples finished", "Past Days", "Total Samples finished per Time", " ", xtest, ytest);
-        saveChart(chart, name,i);
+        XYChart chart = QuickChart.getChart("Samples finished", "Past Days", "Samples finished per Day", " ", xData, yDataPerDay);
+        saveChart(chart, name + "_PerDay",sampleSize);
+        chart = QuickChart.getChart("Total Samples finished", "Past Days", "Total Samples finished over Time", " ", xData, yDataSinceDayOne);
+        saveChart(chart, name + "_OverTime",sampleSize);
     }
 
-    void saveChart(Chart chart, String name, int i)throws IOException {
-        name += "_SampleSize" + i + "_Date" +new Timestamp(System.currentTimeMillis()).toString();
+    void saveChart(Chart chart, String name, long sampleSize)throws IOException {
+        name += "_SampleSize" + sampleSize + "_Date" +new Timestamp(System.currentTimeMillis()).toString();
         name = name.replaceAll(":","-");
         name = name.replaceAll("\\.","-");
         VectorGraphicsEncoder.saveVectorGraphic(chart, "C:\\Users\\julip\\Desktop\\IsysCharts\\" + name, VectorGraphicsEncoder.VectorGraphicsFormat.SVG);
     }
 
-    public void sort(int[] inputArr) {
+    private void sort(int[] inputArr) {
 
         if (inputArr == null || inputArr.length == 0) {
             return;

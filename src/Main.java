@@ -13,18 +13,18 @@ public class Main {
         final int peopleCount = 50 ;
 
         //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
-        final long sampleSize = 100;
-        DataContainer dataContainer = new DataContainer();
+        final int sampleSize = 4000000;
+        DataContainer dataContainer = new DataContainer(sampleSize);
         DoubleToIntFunction dependentFunc,independentFunc;
         dependentFunc = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount, dataContainer);
         independentFunc = e -> independentOpinion(maxDaysToChangeView, peopleCount, dataContainer);
 
         Xchart xchart = new Xchart();
         runSimulation(dependentFunc,sampleSize);
-        xchart.simpleChart(dataContainer, "Dependent");
+        xchart.simpleChart(dataContainer, "Dependent", sampleSize);
         dataContainer.clear();
         runSimulation(independentFunc,sampleSize);
-        xchart.simpleChart(dataContainer, "Independent");
+        xchart.simpleChart(dataContainer, "Independent", sampleSize);
     }
 
     private static void runSimulation(DoubleToIntFunction func,long sampleSize) {
