@@ -12,7 +12,7 @@ class Xchart {
     private int array[];
 
     /**
-     * Constructor for Xchart
+     * Constructor for Xchart. Is empty, stays empty.
      */
     Xchart() {
 
@@ -59,7 +59,7 @@ class Xchart {
     }
 
     /**
-     * Saves a given chart, as SVG and autogenerats the name for that file.
+     * Saves a given chart in output folder as SVG and autogenerats the name for that file. OS-independend (MacOS not tested)
      * @param chart Chart used
      * @param name name for the chart
      * @param sampleSize number of samples
@@ -72,7 +72,7 @@ class Xchart {
 
         String os = System.getProperty("os.name").toLowerCase();
         String path = "";
-        //TODO für windows funktioniert es, aber der ordner output muss noch von hand angelegt werden am anfang. Den rest kann ich nicht überprüfen
+        //TODO Works for mac?
         if(os.contains("windows")){
             path = "src\\output\\";
         }else if(os.contains("nux")) {
@@ -82,6 +82,8 @@ class Xchart {
         }
         VectorGraphicsEncoder.saveVectorGraphic(chart, path + name, VectorGraphicsEncoder.VectorGraphicsFormat.SVG);
     }
+
+    //---ToDo ---- Rest needed?------
 
     /**
      * Uses QuickSort for sorting an array

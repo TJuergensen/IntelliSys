@@ -11,6 +11,7 @@ class DataContainer {
     private int sampleSize;
     private  int maxDaysToRun;
 
+
     /**
      * Creates an empty DataContainer.
      * @param sampleSize Param that's specifies the amount of data in the simulations.

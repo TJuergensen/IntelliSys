@@ -9,6 +9,14 @@ import java.util.stream.DoubleStream;
  */
 public class Main {
 
+
+    //Variables for dependend spreading
+    final static double encounterProbability = 0.085;
+
+    //Variables for Independent spreading
+    final static int startPersonCountWithViewA = 3;
+    final static double changeViewProbability = 0.0223; //2,23% scheint ein guter wert zu sein
+
     //TODO programm mehr beschreiben
     /**
      *
@@ -16,12 +24,14 @@ public class Main {
      * @throws IOException Throws IOException, while saving a chart as SVG
      */
     public static void main(String[] args) throws IOException {
-        final int startPersonCountWithViewA = 3;
+        //VARIABLES
         final int maxDaysToChangeView = 10000;
         final int peopleCount = 50 ;
-
         //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
-        final int sampleSize = 10000;
+        final int sampleSize = 20;
+
+
+        //Creation of data structure
         DataContainer dataContainer = new DataContainer(sampleSize, maxDaysToChangeView);
         DoubleToIntFunction dependentFunc,independentFunc;
         dependentFunc = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount, dataContainer);
@@ -81,6 +91,7 @@ public class Main {
         Person per1, per2;
         int peopleWithViewA = countPeopleWithViewA(people);
         int passedDays = 0;
+
         while ((peopleWithViewA < peopleCount) && (peopleWithViewA > 0)) {
             Collections.shuffle(people, new Random());
             while (people.size() > 0) {
@@ -156,7 +167,6 @@ public class Main {
      */
     private static boolean shouldTheyMeetToday() {
         //8,5% scheint ein guter wert zu sein
-        final double encounterProbability = 0.085;
         return generateRandomProbability(encounterProbability);
     }
 
@@ -165,8 +175,7 @@ public class Main {
      * @return Returns true if he starts to belief in view A, and false if not.
      */
     private static  boolean getViewASpontaneous () {
-        //2,23% scheint ein guter wert zu sein
-        final double changeViewProbability = 0.0223;
+
         return generateRandomProbability(changeViewProbability);
     }
 
