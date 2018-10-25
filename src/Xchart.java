@@ -75,7 +75,7 @@ class Xchart {
         //TODO für windows funktioniert es, aber der ordner output muss noch von hand angelegt werden am anfang. Den rest kann ich nicht überprüfen
         if(os.contains("windows")){
             path = "src\\output\\";
-        }else if(os.contains("nix")) {
+        }else if(os.contains("nux")) {
             path = "./src/output/";
         }else if(os.contains("mac")) {
             path = "./src/output/";
