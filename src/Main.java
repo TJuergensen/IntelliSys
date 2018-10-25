@@ -10,6 +10,11 @@ import java.util.stream.DoubleStream;
 public class Main {
 
 
+    //General variables
+    final static int maxDaysToChangeView = 10000;
+    final static int peopleCount = 50 ;
+    final static int sampleSize = 10000000; //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
+    
     //Variables for dependend spreading
     final static double encounterProbability = 0.085;
 
@@ -25,10 +30,7 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
         //VARIABLES
-        final int maxDaysToChangeView = 10000;
-        final int peopleCount = 50 ;
-        //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
-        final int sampleSize = 20;
+
 
 
         //Creation of data structure
@@ -94,6 +96,8 @@ public class Main {
 
         while ((peopleWithViewA < peopleCount) && (peopleWithViewA > 0)) {
             Collections.shuffle(people, new Random());
+
+            //Simulate 1 day where two random people have the chance to meet
             while (people.size() > 0) {
                 per1 = people.remove(0);
                 per2 = people.remove(0);

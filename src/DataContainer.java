@@ -1,4 +1,4 @@
-
+import java.util.Collections;
 
 /**
  * Holds all of the data, that is created in the simulation.
@@ -9,7 +9,10 @@ class DataContainer {
     private int personsWithViewChangeTilThisDay[];
     private int pointer;    //Used to keep track of the position in the data
     private int sampleSize;
-    private  int maxDaysToRun;
+    private int maxDaysToRun;
+
+    //Added viewACountToday for testing issues
+    private int viewACountToday[];
 
 
     /**
@@ -46,6 +49,8 @@ class DataContainer {
      * @param viewCount Param with the people, that have changed their view til that given day
      */
     synchronized void addViewCountOnDay(int day, int viewCount) {
+
+        viewACountToday[day] = viewCount;
         personsWithViewChangeTilThisDay[day] += viewCount;
     }
 
@@ -55,6 +60,12 @@ class DataContainer {
     void clear() {
         data = new int[sampleSize];
         personsWithViewChangeTilThisDay = new int[maxDaysToRun];
+        viewACountToday = new int [maxDaysToRun];
         pointer = 0;
+    }
+
+    public int[] getViewACountToday()
+    {
+        return viewACountToday;
     }
 }

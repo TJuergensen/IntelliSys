@@ -26,6 +26,35 @@ class Xchart {
      * @throws IOException Throws IOException, while saving a chart as SVG
      */
     void simpleChart(DataContainer dataContainer, String name, long sampleSize)throws IOException {
+
+        int data[] = dataContainer.getViewACountToday(); //an array with maximum days to run fields, each containing the ammount of people with viewA
+        //double[] xData = new double[data.length]; //xData represents each day
+        //double[] yDataCumulated = new double[data.length]; //yDataCumulated represents cumulated ammount of people with view A
+        List<Double> xData = new ArrayList<>();
+        List<Double> yDataCumulated = new ArrayList<>();
+
+        //pre-initialize x- and y data with first values
+        xData.add(0.0);
+        yDataCumulated.add((double)data[0]);
+
+        for(int i = 1; i< data.length; i++)
+        {
+            //Initialize a list of days for chart usage
+
+
+            //cumulate people with viewA
+            if(data[i] != 0)
+            {
+                xData.add((double) i);
+                yDataCumulated.add((double)data[i-1] + data[i] / (double) sampleSize);
+            }
+            //yDataCumulated[i] = (data[i-1] + data[i]);
+        }
+
+        XYChart chart = QuickChart.getChart("Samples finished", "Days", "People with view A", " ", xData, yDataCumulated);
+        saveChart(chart, name + "_PerDay",sampleSize);
+
+        /*
         //Group all data, with the day there finished as key
         array = dataContainer.getDataContainer();
         sort(array);
@@ -56,6 +85,7 @@ class Xchart {
         saveChart(chart, name + "_PerDay",sampleSize);
         chart = QuickChart.getChart("Total Samples finished", "Past Days", "Total Samples finished over Time", " ", xData, yDataSinceDayOne);
         saveChart(chart, name + "_OverTime",sampleSize);
+        */
     }
 
     /**
@@ -83,7 +113,7 @@ class Xchart {
         VectorGraphicsEncoder.saveVectorGraphic(chart, path + name, VectorGraphicsEncoder.VectorGraphicsFormat.SVG);
     }
 
-    //---ToDo ---- Rest needed?------
+    //---ToDo ---- Rest needed?------------------------------------------------------------------------------------------
 
     /**
      * Uses QuickSort for sorting an array
