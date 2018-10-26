@@ -9,9 +9,8 @@ import java.util.stream.DoubleStream;
  */
 public class Main {
 
-    //TODO programm mehr beschreiben
     /**
-     *
+     * Start of the simulation
      * @param args Params, that aren't in use right now.
      * @throws IOException Throws IOException, while saving a chart as SVG
      */
@@ -28,21 +27,21 @@ public class Main {
         independentFunc = e -> independentOpinion(maxDaysToChangeView, peopleCount, dataContainer);
 
         Xchart xchart = new Xchart();
-        System.out.println("Dependent");
-        runSimulation(dependentFunc,sampleSize);
+        //Run and analyse dependent simulation
+        runSimulation(dependentFunc,sampleSize, "Dependent");
         xchart.simpleChart(dataContainer, "Dependent", sampleSize);
         dataContainer.clear();
-        System.out.println("Independent");
-        runSimulation(independentFunc,sampleSize);
+        //Run and analyse independent simulation
+        runSimulation(independentFunc,sampleSize, "Independent");
         xchart.simpleChart(dataContainer, "Independent", sampleSize);
     }
 
-    /***
+    /**
      * runs the simulation. Uses Optional Doubles to enable multithreading. Calculates average of each simulation
      * @param func function to be used; can be dependend or independend
      * @param sampleSize number of samples used
      */
-    private static void runSimulation(DoubleToIntFunction func,long sampleSize) {
+    private static void runSimulation(DoubleToIntFunction func,long sampleSize, String name) {
         long start = System.nanoTime();
         OptionalDouble aveDays = DoubleStream.iterate(0, integer -> integer + 1)
                 .limit(sampleSize)
@@ -51,15 +50,13 @@ public class Main {
                 .average();
         long end = System.nanoTime();
 
-        System.out.println("Durchschnittliche Tage bis alle die Ansicht A haben :" + aveDays.getAsDouble() +
+        System.out.println(name + "\nDurchschnittliche Tage bis alle die Ansicht A haben :" + aveDays.getAsDouble() +
                 "\nBei " + sampleSize + " durchläufen."+
                 "\nDauer des Tests: " + ((end-start) / 1000000000) + " Sekunden" );
     }
 
-    //TODO Independent und dependent weiter zusammen fassen(Am besten ween wir sicher sind, dass sie korrekt sind) und Kommentare hinzufügen.
-
-    /***
-     * //ToDO describe method
+    /**
+     * Simulates the dependent view change.
      * @param startPersonCountWithViewA The number of People with view A on day 0
      * @param maxDaysToChangeView Maximum number of days to run simulation
      * @param peopleCount total ammount of participating people
@@ -81,6 +78,8 @@ public class Main {
         Person per1, per2;
         int peopleWithViewA = countPeopleWithViewA(people);
         int passedDays = 0;
+
+        //As long as not everyone has view A and at least one person has view A.
         while ((peopleWithViewA < peopleCount) && (peopleWithViewA > 0)) {
             Collections.shuffle(people, new Random());
             while (people.size() > 0) {
@@ -94,6 +93,7 @@ public class Main {
                 usedPeople.add(per2);
             }
             passedDays++;
+            //Check if it takes to long to change view
             if(passedDays >= maxDaysToChangeView) {
                 System.err.println("Max days reached to change view. Change probability or increase the max Day limit");
                 return passedDays;
@@ -103,6 +103,10 @@ public class Main {
             peopleWithViewA = countPeopleWithViewA(people);
             dataContainer.addViewCountOnDay(passedDays-1, peopleWithViewA);
         }
+        /*
+         Fill the rest of the array, with the peopleWithViewA.
+         Is needed for the chart creation
+        */
         for(int a = passedDays; a < maxDaysToChangeView;a++) {
             dataContainer.addViewCountOnDay(a, peopleWithViewA);
         }
@@ -110,8 +114,8 @@ public class Main {
     }
 
 
-    /***
-     * //ToDO describe method, insert maxDays
+    /**
+     * Simulates the independent view change.
      * @param maxDaysToChangeView  The number of People with view A on day 0
      * @param peopleCount total ammount of participating people
      * @param dataContainer Data structure holding calculated information
@@ -121,20 +125,30 @@ public class Main {
         List<Person> people = generatePeople(peopleCount);
         int peopleWithViewA = countPeopleWithViewA(people);
         int passedDays = 0;
+
+        //As long as not everyone has view A
         while((peopleWithViewA < peopleCount)) {
+            //Try to get view A
             for(Person p : people) {
                 if(getViewASpontaneous()) p.manifestViewA();
             }
             passedDays++;
+            //Check if it takes to long to change view
             if(passedDays >= maxDaysToChangeView) {
-                System.err.println("Max days reached to change view");
+                System.err.println( "Max days reached to change view\n"+
+                                    "Please increment maxDaysToChangeView");
                 return passedDays;
             }
             peopleWithViewA = countPeopleWithViewA(people);
             dataContainer.addViewCountOnDay(passedDays-1,peopleWithViewA);
         }
-        for(int a = passedDays; a < maxDaysToChangeView;a++) {
-            dataContainer.addViewCountOnDay(a, peopleWithViewA);
+
+        /*
+         Fill the rest of the array, with the peopleWithViewA.
+         Is needed for the chart creation
+        */
+        for(int i = passedDays; i < maxDaysToChangeView; i++) {
+            dataContainer.addViewCountOnDay(i, peopleWithViewA);
         }
         return passedDays;
     }

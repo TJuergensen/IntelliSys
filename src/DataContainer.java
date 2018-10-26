@@ -1,5 +1,3 @@
-
-
 /**
  * Holds all of the data, that is created in the simulation.
  * After the simulation is finished, this data is used to create the charts.
@@ -27,6 +25,10 @@ class DataContainer {
         personsWithViewChangeTilThisDay[day] += viewCount;
     }
 
+    /**
+     * Gets the information about how many persons changed there view til day x
+     * @return Returns the information on how many persons changed there view til day x
+     */
     int[] getPersonsWithViewChangeTilThisDay() {
         return this.personsWithViewChangeTilThisDay;
     }

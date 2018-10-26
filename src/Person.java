@@ -31,7 +31,7 @@ class Person {
     }
 
     /**
-     * Gets the Viewpoint to A from the person. Used as a Getter
+     * Gets the Viewpoint from the person. Used as a Getter
      * @return Returns true if the person beliefs in point A and vise versa
      */
     boolean hasViewA() {
