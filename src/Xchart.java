@@ -27,61 +27,37 @@ class Xchart {
      */
     void simpleChart(DataContainer dataContainer, String name, long sampleSize)throws IOException {
         //Group all data, with the day there finished as key
-        array = dataContainer.getDataContainer();
-        sort(array);
         List<Integer> xData = new ArrayList<>();
-        List<Integer> yDataPerDay = new ArrayList<>();
-        List<Integer> yDataSinceDayOne = new ArrayList<>();
-        int lastInt = -1;
-        int countIntPerDay = 1;
-        int countIntTotal = 1;
+        List<Integer> yData = new ArrayList<>();
 
-        int[] nigger = dataContainer.getPersonsWithViewChangeTilThisDay();
+        int[] viewChangesPerDay = dataContainer.getPersonsWithViewChangeTilThisDay();
         boolean firstViewChange = false;
         boolean lastViewChange = false;
-        for(int day = 0; day < nigger.length; day++) {
+        for(int day = 0; day < viewChangesPerDay.length; day++) {
             if(!firstViewChange) {
-                if(nigger[day] > 0) {
+                if(viewChangesPerDay[day] > 0) {
                     firstViewChange = true;
-
                 }
                 xData.add(day);
-                yDataSinceDayOne.add((int) (nigger[day] / (double) sampleSize));
+                yData.add((int) (viewChangesPerDay[day] / (double) sampleSize));
             }else {
-                if(nigger[day] > 0) {
+                if(viewChangesPerDay[day] > 0) {
                     if(!lastViewChange) {
-                        if((int) (nigger[day] / (double) sampleSize) >= 50) {
+                        if((int) (viewChangesPerDay[day] / (double) sampleSize) >= 50) {
                             lastViewChange = true;
                             xData.add(day);
-                            yDataSinceDayOne.add((int) (nigger[day] / (double) sampleSize));
+                            yData.add((int) (viewChangesPerDay[day] / (double) sampleSize));
                         }else {
                             xData.add(day);
-                            yDataSinceDayOne.add((int) (nigger[day] / (double) sampleSize));
+                            yData.add((int) (viewChangesPerDay[day] / (double) sampleSize));
                         }
                     }
                 }
             }
         }
-        //Iterate over the given data and allocate it for the chart creation
-        /*for(Integer i : array) {
-            if(i != lastInt) {
-                if(lastInt != -1) {
-                    xData.add(lastInt);
-                    yDataPerDay.add(countIntPerDay);
-                    yDataSinceDayOne.add(countIntTotal);
-                }
-                lastInt = i;
-                countIntPerDay = 1;
-            }else {
-                countIntPerDay++;
-            }
-            countIntTotal++;
-        }*/
         // Create Chart
-        XYChart chart;/* = QuickChart.getChart("Samples finished", "Past Days", "Samples finished per Day", " ", xData, yDataPerDay);
-        saveChart(chart, name + "_PerDay",sampleSize);*/
-        chart = QuickChart.getChart("Total Samples finished", "Past Days", "Total Samples finished over Time", " ", xData, yDataSinceDayOne);
-        saveChart(chart, name + "_OverTime",sampleSize);
+        XYChart chart = QuickChart.getChart(name, "Past Days", "Persons with View A", " ", xData, yData);
+        saveChart(chart, name ,sampleSize);
     }
 
     /**

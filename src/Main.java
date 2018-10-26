@@ -22,7 +22,7 @@ public class Main {
 
         //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
         final int sampleSize = 100000;
-        DataContainer dataContainer = new DataContainer(sampleSize, maxDaysToChangeView);
+        DataContainer dataContainer = new DataContainer(maxDaysToChangeView);
         DoubleToIntFunction dependentFunc,independentFunc;
         dependentFunc = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount, dataContainer);
         independentFunc = e -> independentOpinion(maxDaysToChangeView, peopleCount, dataContainer);
@@ -106,7 +106,6 @@ public class Main {
         for(int a = passedDays; a < maxDaysToChangeView;a++) {
             dataContainer.addViewCountOnDay(a, peopleWithViewA);
         }
-        dataContainer.addInt(passedDays);
         return passedDays;
     }
 
@@ -137,7 +136,6 @@ public class Main {
         for(int a = passedDays; a < maxDaysToChangeView;a++) {
             dataContainer.addViewCountOnDay(a, peopleWithViewA);
         }
-        dataContainer.addInt(passedDays);
         return passedDays;
     }
 
