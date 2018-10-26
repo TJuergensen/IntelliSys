@@ -17,11 +17,11 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
         final int startPersonCountWithViewA = 3;
-        final int maxDaysToChangeView = 10000;
+        final int maxDaysToChangeView = 1000;
         final int peopleCount = 50 ;
 
         //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
-        final int sampleSize = 1000000;
+        final int sampleSize = 100000;
         DataContainer dataContainer = new DataContainer(sampleSize, maxDaysToChangeView);
         DoubleToIntFunction dependentFunc,independentFunc;
         dependentFunc = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount, dataContainer);
@@ -103,6 +103,9 @@ public class Main {
             peopleWithViewA = countPeopleWithViewA(people);
             dataContainer.addViewCountOnDay(passedDays-1, peopleWithViewA);
         }
+        for(int a = passedDays; a < maxDaysToChangeView;a++) {
+            dataContainer.addViewCountOnDay(a, peopleWithViewA);
+        }
         dataContainer.addInt(passedDays);
         return passedDays;
     }
@@ -130,6 +133,9 @@ public class Main {
             }
             peopleWithViewA = countPeopleWithViewA(people);
             dataContainer.addViewCountOnDay(passedDays-1,peopleWithViewA);
+        }
+        for(int a = passedDays; a < maxDaysToChangeView;a++) {
+            dataContainer.addViewCountOnDay(a, peopleWithViewA);
         }
         dataContainer.addInt(passedDays);
         return passedDays;

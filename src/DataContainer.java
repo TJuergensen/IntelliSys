@@ -48,6 +48,10 @@ class DataContainer {
         personsWithViewChangeTilThisDay[day] += viewCount;
     }
 
+    int[] getPersonsWithViewChangeTilThisDay() {
+        return this.personsWithViewChangeTilThisDay;
+    }
+
     /**
      * Clears the DataContainer, so that it can be used again.
      */

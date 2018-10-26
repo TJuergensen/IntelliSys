@@ -36,8 +36,34 @@ class Xchart {
         int countIntPerDay = 1;
         int countIntTotal = 1;
 
+        int[] nigger = dataContainer.getPersonsWithViewChangeTilThisDay();
+        boolean firstViewChange = false;
+        boolean lastViewChange = false;
+        for(int day = 0; day < nigger.length; day++) {
+            if(!firstViewChange) {
+                if(nigger[day] > 0) {
+                    firstViewChange = true;
+
+                }
+                xData.add(day);
+                yDataSinceDayOne.add((int) (nigger[day] / (double) sampleSize));
+            }else {
+                if(nigger[day] > 0) {
+                    if(!lastViewChange) {
+                        if((int) (nigger[day] / (double) sampleSize) >= 50) {
+                            lastViewChange = true;
+                            xData.add(day);
+                            yDataSinceDayOne.add((int) (nigger[day] / (double) sampleSize));
+                        }else {
+                            xData.add(day);
+                            yDataSinceDayOne.add((int) (nigger[day] / (double) sampleSize));
+                        }
+                    }
+                }
+            }
+        }
         //Iterate over the given data and allocate it for the chart creation
-        for(Integer i : array) {
+        /*for(Integer i : array) {
             if(i != lastInt) {
                 if(lastInt != -1) {
                     xData.add(lastInt);
@@ -50,10 +76,10 @@ class Xchart {
                 countIntPerDay++;
             }
             countIntTotal++;
-        }
+        }*/
         // Create Chart
-        XYChart chart = QuickChart.getChart("Samples finished", "Past Days", "Samples finished per Day", " ", xData, yDataPerDay);
-        saveChart(chart, name + "_PerDay",sampleSize);
+        XYChart chart;/* = QuickChart.getChart("Samples finished", "Past Days", "Samples finished per Day", " ", xData, yDataPerDay);
+        saveChart(chart, name + "_PerDay",sampleSize);*/
         chart = QuickChart.getChart("Total Samples finished", "Past Days", "Total Samples finished over Time", " ", xData, yDataSinceDayOne);
         saveChart(chart, name + "_OverTime",sampleSize);
     }
@@ -75,7 +101,7 @@ class Xchart {
         //TODO für windows funktioniert es, aber der ordner output muss noch von hand angelegt werden am anfang. Den rest kann ich nicht überprüfen
         if(os.contains("windows")){
             path = "src\\output\\";
-        }else if(os.contains("nix")) {
+        }else if(os.contains("nux")) {
             path = "./src/output/";
         }else if(os.contains("mac")) {
             path = "./src/output/";
