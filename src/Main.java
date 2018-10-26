@@ -21,7 +21,7 @@ public class Main {
         final int peopleCount = 50 ;
 
         //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
-        final int sampleSize = 100000;
+        final int sampleSize = 10000;
         DataContainer dataContainer = new DataContainer(maxDaysToChangeView);
         DoubleToIntFunction dependentFunc,independentFunc;
         dependentFunc = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount, dataContainer);

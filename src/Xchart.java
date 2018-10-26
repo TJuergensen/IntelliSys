@@ -28,7 +28,7 @@ class Xchart {
     void simpleChart(DataContainer dataContainer, String name, long sampleSize)throws IOException {
         //Group all data, with the day there finished as key
         List<Integer> xData = new ArrayList<>();
-        List<Integer> yData = new ArrayList<>();
+        List<Double> yData = new ArrayList<>();
 
         int[] viewChangesPerDay = dataContainer.getPersonsWithViewChangeTilThisDay();
         boolean firstViewChange = false;
@@ -39,17 +39,17 @@ class Xchart {
                     firstViewChange = true;
                 }
                 xData.add(day);
-                yData.add((int) (viewChangesPerDay[day] / (double) sampleSize));
+                yData.add((viewChangesPerDay[day] / (double) sampleSize));
             }else {
                 if(viewChangesPerDay[day] > 0) {
                     if(!lastViewChange) {
                         if((int) (viewChangesPerDay[day] / (double) sampleSize) >= 50) {
                             lastViewChange = true;
                             xData.add(day);
-                            yData.add((int) (viewChangesPerDay[day] / (double) sampleSize));
+                            yData.add((viewChangesPerDay[day] / (double) sampleSize));
                         }else {
                             xData.add(day);
-                            yData.add((int) (viewChangesPerDay[day] / (double) sampleSize));
+                            yData.add((viewChangesPerDay[day] / (double) sampleSize));
                         }
                     }
                 }
