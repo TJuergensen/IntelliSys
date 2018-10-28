@@ -4,6 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.DoubleToIntFunction;
 import java.util.stream.DoubleStream;
 
+
 /**
  * Implementation of the given task https://lernraum.th-luebeck.de/mod/assign/view.php?id=95408
  */
