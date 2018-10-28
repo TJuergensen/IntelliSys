@@ -24,11 +24,14 @@ class Xchart {
      * @param sampleSize Number of samples used
      * @throws IOException Throws IOException, while saving a chart as SVG
      */
-    void simpleChart(DataContainer dataContainer, String name, long sampleSize)throws IOException {
+    void simpleChart(DataContainer dataContainer, String name, long sampleSize, double peopleCount)throws IOException {
         //Group all data, with the day there finished as key
         List<Integer> xData = new ArrayList<>();
         List<Double> yData = new ArrayList<>();
-
+        boolean roundResult = false;
+        if(roundResult) {
+            peopleCount = peopleCount - 0.5;
+        }
         int[] viewChangesPerDay = dataContainer.getPersonsWithViewChangeTilThisDay();
         boolean firstViewChange = false;
         boolean lastViewChange = false;
@@ -43,7 +46,7 @@ class Xchart {
             }else {
                 if(viewChangesPerDay[day] > 0) {
                     if(!lastViewChange) {
-                        if((int) (viewChangesPerDay[day] / (double) sampleSize) >= 50) {
+                        if((int) (viewChangesPerDay[day] / (double) sampleSize) >= peopleCount) {
                             lastViewChange = true;
                             xData.add(day);
                             yData.add((viewChangesPerDay[day] / (double) sampleSize));
