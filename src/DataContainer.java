@@ -3,7 +3,7 @@
  * After the simulation is finished, this data is used to create the charts.
  */
 class DataContainer {
-    private int personsWithViewChangeTilThisDay[];
+    private int pe- rsonsWithViewChangeTilThisDay[];
     private  int maxDaysToRun;
 
     /**
