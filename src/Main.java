@@ -14,7 +14,7 @@ public class Main {
      * @param args Params, that aren't in use right now.
      * @throws IOException Throws IOException, while saving a chart as SVG
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         final int startPersonCountWithViewA = 3;
         final int maxDaysToChangeView = 1000;
         final int peopleCount = 50 ;

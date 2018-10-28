@@ -24,7 +24,7 @@ class Xchart {
      * @param sampleSize Number of samples used
      * @throws IOException Throws IOException, while saving a chart as SVG
      */
-    void simpleChart(DataContainer dataContainer, String name, long sampleSize, double peopleCount)throws IOException {
+    void simpleChart(DataContainer dataContainer, String name, long sampleSize, double peopleCount){
         //Group all data, with the day there finished as key
         List<Integer> xData = new ArrayList<>();
         List<Double> yData = new ArrayList<>();
@@ -35,18 +35,22 @@ class Xchart {
         int[] viewChangesPerDay = dataContainer.getPersonsWithViewChangeTilThisDay();
         boolean firstViewChange = false;
         boolean lastViewChange = false;
-        //TODO ungefähren ablauf beschreiben
+
+        //Adds the information in the x and y data
         for(int day = 0; day < viewChangesPerDay.length; day++) {
+
+            //Is needed to get the first days in with none has view A
             if(!firstViewChange) {
                 if(viewChangesPerDay[day] > 0) {
                     firstViewChange = true;
                 }
                 xData.add(day);
                 yData.add((viewChangesPerDay[day] / (double) sampleSize));
+                //After the first person has view A
             }else {
                 if(viewChangesPerDay[day] > 0) {
                     if(!lastViewChange) {
-                        if((int) (viewChangesPerDay[day] / (double) sampleSize) >= peopleCount) {
+                        if((viewChangesPerDay[day] / (double) sampleSize) >= peopleCount) {
                             lastViewChange = true;
                             xData.add(day);
                             yData.add((viewChangesPerDay[day] / (double) sampleSize));
@@ -70,7 +74,7 @@ class Xchart {
      * @param sampleSize number of samples
      * @throws IOException Throws IOException, while saving a chart as SVG
      */
-    private void saveChart(Chart chart, String name, long sampleSize)throws IOException {
+    private void saveChart(Chart chart, String name, long sampleSize){
         name += "_SampleSize" + sampleSize + "_Date" +new Timestamp(System.currentTimeMillis()).toString();
         name = name.replaceAll(":","-");
         name = name.replaceAll("\\.","-");
@@ -85,6 +89,10 @@ class Xchart {
         }else if(os.contains("mac")) {
             path = "./src/output/";
         }
-        VectorGraphicsEncoder.saveVectorGraphic(chart, path + name, VectorGraphicsEncoder.VectorGraphicsFormat.SVG);
+        try {
+            VectorGraphicsEncoder.saveVectorGraphic(chart, path + name, VectorGraphicsEncoder.VectorGraphicsFormat.SVG);
+        }catch (IOException e) {
+            System.err.println("Cannot save data to " + path +"\nPlease add correct path manually");
+        }
     }
 }
