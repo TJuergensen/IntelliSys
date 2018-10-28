@@ -10,6 +10,8 @@ import java.util.*;
  */
 class Xchart {
 
+    //Variables that change the result
+    private static boolean roundResult = false;
     /**
      * Constructor for Xchart
      */
@@ -28,7 +30,6 @@ class Xchart {
         //Group all data, with the day there finished as key
         List<Integer> xData = new ArrayList<>();
         List<Double> yData = new ArrayList<>();
-        boolean roundResult = false;
         if(roundResult) {
             peopleCount = peopleCount - 0.5;
         }

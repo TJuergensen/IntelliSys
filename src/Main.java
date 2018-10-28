@@ -9,18 +9,23 @@ import java.util.stream.DoubleStream;
  */
 public class Main {
 
+    //Variables that change the result
+    private final static int startPersonCountWithViewA = 3;
+    private final static int maxDaysToChangeView = 1000;
+    private final static int peopleCount = 50 ;
+    private final static int sampleSize = 10000;
+    //8,5% scheint ein guter wert zu sein
+    private final static double encounterProbability = 0.085;
+    //2,23% scheint ein guter wert zu sein
+    private final static double changeViewProbability = 0.0223;
+
     /**
      * Start of the simulation
      * @param args Params, that aren't in use right now.
      * @throws IOException Throws IOException, while saving a chart as SVG
      */
     public static void main(String[] args){
-        final int startPersonCountWithViewA = 3;
-        final int maxDaysToChangeView = 1000;
-        final int peopleCount = 50 ;
 
-        //Genaue und noch zeitlich ok bei mir Sample Size: Independent = 10 millionen, Dependent = 1 millionen
-        final int sampleSize = 100000;
         DataContainer dataContainer = new DataContainer(maxDaysToChangeView);
         DoubleToIntFunction dependentFunc,independentFunc;
         dependentFunc = e -> dependentOpinion(startPersonCountWithViewA, maxDaysToChangeView, peopleCount, dataContainer);
@@ -173,8 +178,6 @@ public class Main {
      * @return Returns True if they should meet and false if not.
      */
     private static boolean shouldTheyMeetToday() {
-        //8,5% scheint ein guter wert zu sein
-        final double encounterProbability = 0.085;
         return generateRandomProbability(encounterProbability);
     }
 
@@ -183,8 +186,6 @@ public class Main {
      * @return Returns true if he starts to belief in view A, and false if not.
      */
     private static  boolean getViewASpontaneous () {
-        //2,23% scheint ein guter wert zu sein
-        final double changeViewProbability = 0.0223;
         return generateRandomProbability(changeViewProbability);
     }
 
