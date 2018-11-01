@@ -7,6 +7,9 @@ import java.util.stream.DoubleStream;
 
 /**
  * Implementation of the given task https://lernraum.th-luebeck.de/mod/assign/view.php?id=95408
+ *
+ +++++++++++ THIS ONE GOT US 190 OF 200 POSSIBLE POINTS +++++++++++++++++
+            WE MAY HAVE 50 POINTS LOSS IN TOTAL, NOW GOT 10. -> MAX 40 LEFT FOR 1.0
  */
 public class Main {
 
@@ -200,7 +203,7 @@ public class Main {
         double max = 1;
         double randomNum = ThreadLocalRandom.current().nextDouble(min, max);
 
-        return randomNum <= probability;
+        return randomNum <= probability; //Can never be 1!  To change this, use "<"
     }
 
     /**
