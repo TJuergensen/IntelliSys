@@ -15,7 +15,7 @@ class Hill {
     //Variables that change the result
     private final int maxX = 3000;
     private final int maxY = 4943;
-    private final double minAvgHeightDifference = 1.1;
+    private final double minAvgHeightDifference = 0.3;
     private final double maxDifferenceToHilltop = 2.0;
     private String[][] data;
 
@@ -109,30 +109,17 @@ class Hill {
         }else {
             this.colorTop= colorB;
         }
-        final int stay = 0;
-        final int goRight = 1;
-        final int goLeft = -1;
-        final int goUp = 1;
-        final int goDown = -1;
 
         int initDistance = 0;
-        //right
-        markHill(x, y, goRight, stay, this.hilltopHeight, initDistance);
-        //left
-        markHill(x, y, goLeft,  stay, this.hilltopHeight, initDistance);
-        //up
-        markHill(x, y, stay,    goUp, this.hilltopHeight, initDistance);
-        //down
-        markHill(x, y, stay,    goDown, this.hilltopHeight, initDistance);
-        //up left
-        markHill(x, y, goLeft,  goUp, this.hilltopHeight, initDistance);
-        //up right
-        markHill(x, y, goRight, goUp, this.hilltopHeight, initDistance);
-        //down left
-        markHill(x, y, goLeft,  goDown, this.hilltopHeight, initDistance);
-        //down right
-        markHill(x, y, goRight, goDown, this.hilltopHeight, initDistance);
 
+        // markhill in every direction
+        for(int i = -1; i <= 1; i++) {
+            for(int j = -1; j <= 1; j++) {
+                if(!(i == 0 && j == 0)) {
+                    markHill(x, y, i, j, this.hilltopHeight, initDistance);
+                }
+            }
+        }
     }
 
     private boolean markHill(int x, int y, int xOffset, int yOffset, double oldPointOnHill, int distance) {
