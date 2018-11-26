@@ -8,6 +8,7 @@ class Hill {
     private double hilltopHigh;
     private final int maxX = 3000;
     private final int maxY = 4943;
+    private int hi = 5;
     private final double minAvgHighDifference = 1.1;
     private final double maxDifferenceToHilltop = 2.0;
     private final double avgSlopeDifferenceInit = 5.0;
