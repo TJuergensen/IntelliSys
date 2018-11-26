@@ -13,7 +13,7 @@ class Hill {
     private final double minAvgHeightDifference = 1.1;
     private final double maxDifferenceToHilltop = 2.0;
     private String[][] data;
-    
+
     //Structures to save all data
     private ArrayList<Double> endOfHillHeights = new ArrayList();
     private double minHeightHillEndPoint;
@@ -161,5 +161,55 @@ class Hill {
         distancesHilltopAndEndOfHill.add(distance);
         endOfHillHeights.add(oldPointOnHill);
         return false;
+    }
+
+    //getter
+
+    public ArrayList<Double> getEndOfHillHeights() {
+        return endOfHillHeights;
+    }
+
+    public double getMinHeightHillEndPoint() {
+        return minHeightHillEndPoint;
+    }
+
+    public double getMaxHeightHillEndPoint() {
+        return maxHeightHillEndPoint;
+    }
+
+    public double getAvgHeightHillEndPoints() {
+        return avgHeightHillEndPoints;
+    }
+
+    public int getPointsOnHilltopCount() {
+        return pointsOnHilltopCount;
+    }
+
+    public int getPointsOnSlopeCount() {
+        return pointsOnSlopeCount;
+    }
+
+    public int getPointsAfterSlopeCount() {
+        return pointsAfterSlopeCount;
+    }
+
+    public ArrayList<Integer> getDistancesHilltopAndEndOfHill() {
+        return distancesHilltopAndEndOfHill;
+    }
+
+    public double getAvgDistanceHilltopAndEndOfHill() {
+        return avgDistanceHilltopAndEndOfHill;
+    }
+
+    public ArrayList<Double> getTilts() {
+        return tilts;
+    }
+
+    public double getAvgTilt() {
+        return avgTilt;
+    }
+
+    public double getRelativeHilltopHeight() {
+        return relativeHilltopHeight;
     }
 }

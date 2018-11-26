@@ -3,19 +3,28 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
     static String savePath  = "src\\output\\hilldetectiontest.png";
-    static String a0Path    = "src\\input\\A0.csv";
-    static String b0Path    = "src\\input\\B0.csv";
+    static String aPath    = "src\\input\\A1.csv";
+    static String bPath    = "src\\input\\B1.csv";
     static String dataPath  = "src\\input\\data.csv";
 
     public static void main(String[] args) throws IOException {
-        File f = new File(savePath);
+        //load Data
         String[][] data = loadDATA();
-        data = loadB0(data);
-        data = loadA0(data);
+        boolean loadA = true;
+        ArrayList<Hill> hillsB = load(data, !loadA);
+        ArrayList<Hill> hillsA = load(data, loadA);
+
+        //Print image
+        printData(data);
+    }
+
+    private static void printData(String[][] data) throws IOException {
+        File file = new File(savePath);
         int w = data.length;
         int h = data[0].length;
         int type = BufferedImage.TYPE_INT_RGB;
@@ -30,13 +39,19 @@ public class Main {
                 image.setRGB(x, y, b);
             }
         }
-        ImageIO.write(image, "PNG", f);
+        ImageIO.write(image, "PNG", file);
     }
 
-    private static String[][] loadA0(String[][] data) throws IOException {
-        Scanner scanner = new Scanner(new File(a0Path));
+    private static ArrayList<Hill> load(String[][] data, boolean loadA) throws IOException {
+        String path;
+        if(loadA) {
+            path = aPath;
+        }else {
+            path = bPath;
+        }
+        Scanner scanner = new Scanner(new File(path));
         scanner.useDelimiter(",");
-
+        ArrayList<Hill> hills = new ArrayList();
         String dummy;
         String[] k;
         String x = "";
@@ -46,9 +61,7 @@ public class Main {
             if(dummy.contains("\n")) {
                 k = dummy.split("\\r?\\n");
                 y = k[0];
-                //data[Integer.parseInt(x)][Integer.parseInt(y)] = color;
-                //data = fill(data, Integer.parseInt(x), Integer.parseInt(y), color);
-                new Hill(data, Integer.parseInt(x), Integer.parseInt(y), false);
+                hills.add(new Hill(data, Integer.parseInt(x), Integer.parseInt(y), loadA));
                 if(k.length == 2) {
                     x = k[1];
                 }
@@ -57,33 +70,7 @@ public class Main {
             }
         }
         scanner.close();
-        return data;
-    }
-    private static String[][] loadB0(String[][] data) throws IOException {
-        Scanner scanner = new Scanner(new File(b0Path));
-        scanner.useDelimiter(",");
-
-        String dummy;
-        String[] k;
-        String x = "";
-        String y;
-        while(scanner.hasNext()){
-            dummy = scanner.next();
-            if(dummy.contains("\n")) {
-                k = dummy.split("\\r?\\n");
-                y = k[0];
-                //data[Integer.parseInt(x)][Integer.parseInt(y)] = color;
-                //data = fill(data, Integer.parseInt(x), Integer.parseInt(y), color);
-                new Hill(data, Integer.parseInt(x), Integer.parseInt(y), true);
-                if(k.length == 2) {
-                    x = k[1];
-                }
-            } else {
-                x = dummy;
-            }
-        }
-        scanner.close();
-        return data;
+        return hills;
     }
 
     private static String[][] loadDATA() throws FileNotFoundException {
