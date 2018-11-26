@@ -1,13 +1,18 @@
 import java.util.ArrayList;
 
 class Hill {
+
     private boolean isA;
+    private final boolean printHillInfo = false;
+
+    //Varables that change the color in the image
     private final String colorA = "16776960";
     private final String colorB = "16711680";
     private String colorTop;
     private final String colorEndOfSlope = "0";
     private final String colorSlope = "16777215";
-    private double hilltopHeight;
+
+    //Variables that change the result
     private final int maxX = 3000;
     private final int maxY = 4943;
     private final double minAvgHeightDifference = 1.1;
@@ -15,6 +20,8 @@ class Hill {
     private String[][] data;
 
     //Structures to save all data
+    private double hilltopHeight;
+
     private ArrayList<Double> endOfHillHeights = new ArrayList();
     private double minHeightHillEndPoint;
     private double maxHeightHillEndPoint;
@@ -38,20 +45,26 @@ class Hill {
         this.hilltopHeight = Double.parseDouble(data[x][y]);
         markHill(x, y);
         calculate();
+        printHillInfo();
+    }
 
-        System.out.println(
-        "\nisA                              : " + isA +
-        "\nminHeightHillEndPoint            : " + minHeightHillEndPoint +
-        "\nmaxHeightHillEndPoint            : " + maxHeightHillEndPoint +
-        "\navgHeightHillEndPoints           : " + avgHeightHillEndPoints +
-        "\npointsOnHilltopCount             : " + pointsOnHilltopCount +
-        "\npointsOnSlopeCount               : " + pointsOnSlopeCount +
-        "\npointsAfterSlopeCount            : " + pointsAfterSlopeCount +
-        "\navgDistanceHilltopAndEndOfHill   : " + avgDistanceHilltopAndEndOfHill +
-        "\navgTilt                          : " + avgTilt +
-        "\nrelativeHeightOfHill             : " + relativeHilltopHeight +
-        "\nheightOfHill                     : " + hilltopHeight
-        );
+    private void printHillInfo() {
+        if(printHillInfo) {
+
+            System.out.println(
+                            "\nisA                              : " + isA +
+                            "\nminHeightHillEndPoint            : " + minHeightHillEndPoint +
+                            "\nmaxHeightHillEndPoint            : " + maxHeightHillEndPoint +
+                            "\navgHeightHillEndPoints           : " + avgHeightHillEndPoints +
+                            "\npointsOnHilltopCount             : " + pointsOnHilltopCount +
+                            "\npointsOnSlopeCount               : " + pointsOnSlopeCount +
+                            "\npointsAfterSlopeCount            : " + pointsAfterSlopeCount +
+                            "\navgDistanceHilltopAndEndOfHill   : " + avgDistanceHilltopAndEndOfHill +
+                            "\navgTilt                          : " + avgTilt +
+                            "\nrelativeHeightOfHill             : " + relativeHilltopHeight +
+                            "\nheightOfHill                     : " + hilltopHeight
+            );
+        }
     }
 
     private void calculate() {

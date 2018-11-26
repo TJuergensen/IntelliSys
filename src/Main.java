@@ -8,14 +8,23 @@ import java.util.Scanner;
 
 public class Main {
     static String savePath  = "src\\output\\hilldetectiontest.png";
-    static String aPath    = "src\\input\\A1.csv";
-    static String bPath    = "src\\input\\B1.csv";
+    static String aPath     = "src\\input\\A1.csv";
+    static String bPath     = "src\\input\\B1.csv";
     static String dataPath  = "src\\input\\data.csv";
 
     public static void main(String[] args) throws IOException {
+        String os = System.getProperty("os.name").toLowerCase();
+
+        //Check if os is linux
+        if(os.contains("nux")) {
+            savePath  = "./src/output/hilldetectiontest.png";
+            aPath     = "./src/input/A1.csv";
+            bPath     = "./src/input/B1.csv";
+            dataPath  = "./src/input/data.csv";
+        }
         //load Data
         String[][] data = loadDATA();
-        boolean loadA = true;
+        final boolean loadA = true; //Is only used to decide if A or B needs to be loaded
         ArrayList<Hill> hillsB = load(data, !loadA);
         ArrayList<Hill> hillsA = load(data, loadA);
 
@@ -35,6 +44,8 @@ public class Main {
         for(int y = 0; y < h; y++) {
             for(int x = 0; x < w; x++) {
                 a = Double.parseDouble(data[x][y]);
+
+                //the amount of zeros represents the decimal precision
                 b = (int)Math.round(a*10000);
                 image.setRGB(x, y, b);
             }
@@ -97,20 +108,4 @@ public class Main {
         scanner.close();
         return data;
     }
-/*
-    private static String[][] fill(String[][] data, int x,int y, String color) {
-        data[x-1][y-1] = color;
-        data[x][y-1] = color;
-        data[x+1][y-1] = color;
-
-        data[x-1][y] = color;
-        data[x][y] = color;
-        data[x+1][y] = color;
-
-        data[x-1][y+1] = color;
-        data[x][y+1] = color;
-        data[x+1][y+1] = color;
-        return data;
-    }
-    */
 }
