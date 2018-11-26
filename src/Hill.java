@@ -5,9 +5,9 @@ class Hill {
     private boolean isA;
     private final boolean printHillInfo = false;
 
-    //Varables that change the color in the image
+    //Variables that change the color in the image
     private final String colorA = "16776960";
-    private final String colorB = "16711680";
+    private final String colorB = "16711680"; // RED
     private String colorTop;
     private final String colorEndOfSlope = "0";
     private final String colorSlope = "16777215";
@@ -80,7 +80,7 @@ class Hill {
     }
 
     private void  calculateMinAndMaxHeightBetweenBottomAndTop() {
-        double min = 1000000000;
+        double min = 1000000000; //This is a hill. REALLY. REAAALLY a hill!
         double max = 0;
 
         for(double i : endOfHillHeights) {
@@ -136,10 +136,10 @@ class Hill {
                 return false;
             }
             //Recognise if its still the part of the hilltop and mark it as such
-            if(newPointOnHill < this.hilltopHeight + this.maxDifferenceToHilltop && newPointOnHill > this.hilltopHeight - this.maxDifferenceToHilltop){
+            if(newPointOnHill < this.hilltopHeight + this.maxDifferenceToHilltop && newPointOnHill > this.hilltopHeight - this.maxDifferenceToHilltop){ //Still on Plateau?
                 data[x][y] = this.colorTop;
                 pointsOnHilltopCount++;
-                return markHill(x, y, xOffset, yOffset, newPointOnHill, ++distance);
+                return markHill(x, y, xOffset, yOffset, newPointOnHill, ++distance); //Recursion for this direction
             }else {
                 //Recognise if the new position is part of the slope
                 if (newPointOnHill < oldPointOnHill) {
@@ -149,7 +149,7 @@ class Hill {
                     if (tilt < this.minAvgHeightDifference) {
                         this.data[x][y] = this.colorEndOfSlope;
                         pointsAfterSlopeCount++;
-                        return markHill(x, y, xOffset, yOffset, newPointOnHill, ++distance);
+                        return markHill(x, y, xOffset, yOffset, newPointOnHill, ++distance); //Recursion for steepness
                     } else {
                         pointsOnSlopeCount++;
                         this.data[x][y] = this.colorSlope;

@@ -17,10 +17,10 @@ public class Main {
 
         //Check if os is linux
         if(os.contains("nux")) {
-            savePath  = "./src/output/hilldetectiontest.png";
-            aPath     = "./src/input/A1.csv";
-            bPath     = "./src/input/B1.csv";
-            dataPath  = "./src/input/data.csv";
+            savePath  = "hilldetectiontest.png";
+            aPath     = "A0.csv";
+            bPath     = "B0.csv";
+            dataPath  = "data.csv";
         }
         //load Data
         String[][] data = loadDATA();
