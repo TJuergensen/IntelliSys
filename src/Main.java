@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class Main {
     static String savePath  = "src\\output\\hilldetectiontest.png";
     static String aPath     = "src\\input\\A1.csv";
@@ -29,7 +30,12 @@ public class Main {
         ArrayList<Hill> hillsA = load(data, loadA);
 
         //Print image
-        printData(data);
+        //printData(data);
+
+
+        System.out.println(util.calculateAvgHeight(hillsB));
+        System.out.println(util.calculateAvgHeight(hillsA));
+
     }
 
     private static void printData(String[][] data) throws IOException {
