@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 public class Main {
     static String savePath  = "src\\output\\hilldetectiontest.png";
-    static String aPath     = "src\\input\\A1.csv";
-    static String bPath     = "src\\input\\B1.csv";
+    static String aPath     = "src\\input\\A0.csv";
+    static String bPath     = "src\\input\\B0.csv";
     static String dataPath  = "src\\input\\data.csv";
 
     public static void main(String[] args) throws IOException {
@@ -32,9 +32,39 @@ public class Main {
         //Print image
         //printData(data);
 
+        double avgA = util.calculateAvgHeight(hillsA);
+        System.out.println("A: " + avgA);
+        double avgB = util.calculateAvgHeight(hillsB);
+        System.out.println("B: " + avgB);
+        double isA, isB;
+        int countA = 0;
+        int countB = 0;
+        int unsicher = 0;
+        for(Hill h : hillsA) {
+            isA = util.test(hillsA, avgA, h.getRelativeHilltopHeight());
+            System.out.println(h.getRelativeHilltopHeight());
+            System.out.println("isA: " + isA + "%");
+            isB = util.test(hillsB, avgB, h.getRelativeHilltopHeight());
+            System.out.println("isB: " + isB + "%");
+            System.out.println("\n\n\n");
 
-        System.out.println(util.calculateAvgHeight(hillsB));
-        System.out.println(util.calculateAvgHeight(hillsA));
+            double dif = isA - isB;
+            if(dif < 0) {
+                dif = dif * -1;
+            }
+            if((isA > 0.5 || isB > 0.5) && dif > 0.6) {
+                if (isA > isB) {
+                    countA++;
+                } else {
+                    countB++;
+                }
+            }else {
+                unsicher++;
+            }
+        }
+        System.out.println("Als A erkannt: " + countA);
+        System.out.println("Als B erkannt: " + countB);
+        System.out.println("Nicht sicher : " + unsicher);
 
     }
 
