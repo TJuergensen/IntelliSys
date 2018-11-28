@@ -2,6 +2,15 @@ import java.util.List;
 
 public class util {
 
+    //"Defines"
+    public static int characteristicCount = 1;
+    //These are used as kind of enum
+    public static final int A = 0;
+    public static final int B = 1;
+    public static final int UNCERTAIN = 2;
+    //"enum" end
+
+
     public static double calculateAvgHeight(List<Hill> list) {
         double ret = 0.0;
         for (Hill h : list) {
@@ -28,4 +37,5 @@ public class util {
         }
         return count/list.size();
     }
+
 }

@@ -1,9 +1,14 @@
+import jdk.nashorn.internal.runtime.linker.Bootstrap;
+
 import java.util.ArrayList;
 
 class Hill {
 
     private boolean isA;
     private final boolean printHillInfo = false;
+    private double UNCERTAINITYRANGE = 0.0; //Range in which A and B need to be to be uncertain if it is A or B. WITHIN this range = uncertain
+
+    private int objectType = util.UNCERTAIN;
 
     //Variables that change the color in the image
     private final String colorA = "16776960";
@@ -38,6 +43,7 @@ class Hill {
     private double avgTilt;
 
     private double relativeHilltopHeight;
+    private double[][] probabilityList; //Stores probabilities. [][0] probability for A, [][1] probability for B
 
     Hill(String[][] data, int x, int y, boolean isA) {
         this.isA = isA;
@@ -46,6 +52,48 @@ class Hill {
         markHill(x, y);
         calculate();
         printHillInfo();
+        probabilityList = new double[util.characteristicCount][2];
+    }
+
+    public void setProbability(int characteristic, int AorB, double value) {
+        probabilityList[characteristic][AorB] = value;
+    }
+
+    public int calculateObjectType() {
+        int ret = util.UNCERTAIN;
+
+        double probabilityA =0.0;
+        double probabilityB =0.0;
+        //count probabilities
+        for(int i=0; i<util.characteristicCount; i++){
+            probabilityA += probabilityList[i][util.A];
+            probabilityB += probabilityList[i][util.B];
+        }
+        //normalize probabilities
+        probabilityA /= util.characteristicCount;
+        probabilityB /= util.characteristicCount;
+
+        //Check if we can be kind of sure this object is assignable
+        double range = Math.abs(probabilityA-probabilityB);
+        if(range > UNCERTAINITYRANGE)
+        {
+            //Check which is greater
+            if(probabilityA>probabilityB)
+            {
+                ret = util.A;
+            } else {
+                ret = util.B;
+            }
+
+        }
+
+        objectType = ret;
+        return ret;
+    }
+
+    public int getObjectType()
+    {
+        return this.objectType;
     }
 
     private void printHillInfo() {
