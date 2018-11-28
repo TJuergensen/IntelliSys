@@ -1,5 +1,3 @@
-import jdk.nashorn.internal.runtime.linker.Bootstrap;
-
 import java.util.ArrayList;
 
 class Hill {
@@ -7,7 +5,7 @@ class Hill {
     private boolean isA;
     private final boolean printHillInfo = false; //Debug purposes
 
-    private int objectType = util.UNCERTAIN;
+    private int classification = util.UNCERTAIN;
 
     //Variables that change the color in the image
     private final String colorA = "16776960";
@@ -86,13 +84,13 @@ class Hill {
 
         }
 
-        objectType = ret;
+        classification = ret;
         return ret;
     }
 
-    public int getObjectType()
+    public int getClassification()
     {
-        return this.objectType;
+        return this.classification;
     }
 
     private void printHillInfo() {
