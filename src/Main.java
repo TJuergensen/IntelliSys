@@ -11,7 +11,7 @@ public class Main {
     static String savePath  = "src\\output\\hilldetectiontest.png";
     static String trainingsSetA_path     = "src\\input\\A0.csv";
     static String trainingsSetB_path     = "src\\input\\B0.csv";
-    static String toClassify_path  = "";
+    static String toClassify_path  = "src\\input\\A1.csv";
     static String dataPath  = "src\\input\\data.csv";
     static ArrayList<Hill> trainingsSet_B, trainingsSet_A, toClassify;
 
@@ -23,7 +23,7 @@ public class Main {
             savePath  = "hilldetectiontest.png";
             trainingsSetA_path = "A0.csv";
             trainingsSetB_path = "B0.csv";
-            toClassify_path =" ";
+            toClassify_path ="A1.csv";
             dataPath  = "data.csv";
         }
         //load Data
@@ -33,7 +33,6 @@ public class Main {
         //Print image
         //printData(data);
         util.classify(trainingsSet_A, trainingsSet_B, null);
-
     }
 
     private static void printData(String[][] data) throws IOException {

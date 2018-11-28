@@ -22,24 +22,24 @@ class Hill {
     private String[][] data;
 
     //Structures to save all data
-    private double hilltopHeight;
+    private double hilltopHeight; //avg wird klassifiziert
 
     private ArrayList<Double> endOfHillHeights = new ArrayList();
-    private double minHeightHillEndPoint;
-    private double maxHeightHillEndPoint;
-    private double avgHeightHillEndPoints;
+    private double minHeightHillEndPoint; //nicht klassifizieren
+    private double maxHeightHillEndPoint;  //nicht klassifizieren
+    private double avgHeightHillEndPoints;  //toDO klassifizieren?
 
-    private int pointsOnHilltopCount = 0;
-    private int pointsOnSlopeCount = 0;
-    private int pointsAfterSlopeCount = 0;
+    private int pointsOnHilltopCount = 0;   //Wird Klassifiziert
+    private int pointsOnSlopeCount = 0;     //Wird Klassifiziert
+    private int pointsAfterSlopeCount = 0;  //Wird Klassifiziert
 
     private ArrayList<Integer> distancesHilltopAndEndOfHill = new ArrayList<>();
-    private double avgDistanceHilltopAndEndOfHill;
+    private double avgDistanceHilltopAndEndOfHill; //Also Known as: BREITE. ToDO FCKING REFACTOR THIS!
 
     private ArrayList<Double> tilts = new ArrayList();
-    private double avgTilt;
+    private double avgTilt;     //Wird Klassifiziert
 
-    private double relativeHilltopHeight;
+    private double relativeHilltopHeight; //Wird Klassifiziert
     private double[][] probabilityList; //Stores probabilities. [][0] probability for A, [][1] probability for B
 
     Hill(String[][] data, int x, int y, boolean isA) {
