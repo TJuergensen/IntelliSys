@@ -5,8 +5,7 @@ import java.util.ArrayList;
 class Hill {
 
     private boolean isA;
-    private final boolean printHillInfo = false;
-    private double UNCERTAINITYRANGE = 0.0; //Range in which A and B need to be to be uncertain if it is A or B. WITHIN this range = uncertain
+    private final boolean printHillInfo = false; //Debug purposes
 
     private int objectType = util.UNCERTAIN;
 
@@ -75,7 +74,7 @@ class Hill {
 
         //Check if we can be kind of sure this object is assignable
         double range = Math.abs(probabilityA-probabilityB);
-        if(range > UNCERTAINITYRANGE)
+        if(range > util.UNCERTAINITYRANGE)
         {
             //Check which is greater
             if(probabilityA>probabilityB)

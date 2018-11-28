@@ -9,6 +9,7 @@ public class util {
     public static final int B = 1;
     public static final int UNCERTAIN = 2;
     //"enum" end
+    public static final double UNCERTAINITYRANGE = 0.0; //Range in which A and B need to be to be uncertain if it is A or B. WITHIN this range = uncertain
 
 
     public static double calculateAvgHeight(List<Hill> list) {
