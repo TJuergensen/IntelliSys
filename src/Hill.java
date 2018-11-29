@@ -44,8 +44,8 @@ class Hill {
     private double relativeHilltopHeight; //Wird Klassifiziert
     private double[][] probabilityList; //Stores probabilities. [][0] probability for A, [][1] probability for B
 
-    Hill(String[][] data, int x, int y, boolean isA) {
-        this.isA = isA;
+    Hill(String[][] data, int x, int y, int classif) {
+        this.classification = classif;
         this.data = data;
         this.hilltopHeight = Double.parseDouble(data[x][y]);
         markHill(x, y);
@@ -99,7 +99,7 @@ class Hill {
         if(printHillInfo) {
 
             System.out.println(
-                            "\nisA                              : " + isA +
+                            "\nisType                              : " + classification +
                             "\nminHeightHillEndPoint            : " + minHeightHillEndPoint +
                             "\nmaxHeightHillEndPoint            : " + maxHeightHillEndPoint +
                             "\navgHeightHillEndPoints           : " + avgHeightHillEndPoints +
@@ -162,10 +162,16 @@ class Hill {
     }
 
     private void markHill(int x, int y) {
-        if(isA) {
-            this.colorTop= colorA;
-        }else {
-            this.colorTop= colorB;
+
+        switch (classification){
+            case util.A:
+                this.colorTop= colorA;
+                    break;
+            case util.B:
+                this.colorTop= colorB;
+                break;
+            case util.UNCERTAIN:
+                break;
         }
 
         int initDistance = 0;

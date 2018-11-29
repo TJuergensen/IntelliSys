@@ -94,7 +94,7 @@ public class Main {
             if(dummy.contains("\n")) {
                 k = dummy.split("\\r?\\n");
                 y = k[0];
-                trainingsSet_A.add(new Hill(data, Integer.parseInt(x), Integer.parseInt(y), true));
+                trainingsSet_A.add(new Hill(data, Integer.parseInt(x), Integer.parseInt(y), util.A));
                 if(k.length == 2) {
                     x = k[1];
                 }
@@ -112,7 +112,7 @@ public class Main {
             if(dummy.contains("\n")) {
                 k = dummy.split("\\r?\\n");
                 y = k[0];
-                trainingsSet_B.add(new Hill(data, Integer.parseInt(x), Integer.parseInt(y), false));
+                trainingsSet_B.add(new Hill(data, Integer.parseInt(x), Integer.parseInt(y), util.B));
                 if(k.length == 2) {
                     x = k[1];
                 }
@@ -130,7 +130,7 @@ public class Main {
             if(dummy.contains("\n")) {
                 k = dummy.split("\\r?\\n");
                 y = k[0];
-                toClassify.add(new Hill(data, Integer.parseInt(x), Integer.parseInt(y), false));
+                toClassify.add(new Hill(data, Integer.parseInt(x), Integer.parseInt(y), util.UNCERTAIN));
                 if(k.length == 2) {
                     x = k[1];
                 }
