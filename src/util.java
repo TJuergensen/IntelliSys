@@ -10,10 +10,8 @@ public class util {
     public static final int A = 0;
     public static final int B = 1;
     public static final int UNCERTAIN = 2;
-    public static int curentCharacteristic = 0;
     //"enum" end
-    public static final double UNCERTAINITYRANGE[] = {0.2, 0.1, 0.1, 0.1}; //Range in which A and B need to be to be uncertain if it is A or B. WITHIN this range = uncertain
-
+    public static int curentCharacteristic = 0;
 
     public static double testAverage(List<Hill> list, double avgFromTestSet, double avgFromTestedObject, Function<Hill, Double> getAvgFromHill) {
         double count = 0; //this hill is relativlely close to this many hills from the trainingsSet (avg)
@@ -32,6 +30,7 @@ public class util {
 
     public static void classify(List<Hill> trainingsSetA, List<Hill> trainingsSetB, List<Hill> toClassify) //This method will run all classification-tests
     {
+        //TODO nu zu double carten wenn es noetig ist
         Function<Hill, Double> relativeHeight = (hill) -> hill.getRelativeHilltopHeight();          //Gutes kreterium
         Function<Hill, Double> tilt = (hill) -> hill.getAvgTilt();                                  //Nicht geeignet
         Function<Hill, Double> pointsOnHilltop = (hill) ->(double) hill.getPointsOnHilltopCount();  //Nicht gut zum Klassifizieren
@@ -57,50 +56,18 @@ public class util {
                                     .mapToDouble(hill -> getAvgFromHill.apply(hill))
                                     .average()
                                     .getAsDouble();
-        System.out.println("A: " + avgA);
         double avgB = trainingsSetB.stream()
                                     .mapToDouble(hill -> getAvgFromHill.apply(hill))
                                     .average()
                                     .getAsDouble();
-        System.out.println("B: " + avgB);
         double isA, isB;
-        int countA = 0;
-        int countB = 0;
-        int unsicher = 0;
 
-        for (Hill h : toClassify) { //ToDO Change trainingsSetA to toClassify
+        for (Hill h : toClassify) {
             isA = util.testAverage(trainingsSetA, avgA, getAvgFromHill.apply(h), getAvgFromHill);
-            //System.out.println(getAvgFromHill.apply(h));
             h.setProbability(curentCharacteristic, A, isA);
-            System.out.println("isA: " + isA + "%");
             isB = util.testAverage(trainingsSetB, avgB, getAvgFromHill.apply(h), getAvgFromHill);
             h.setProbability(curentCharacteristic, B, isB);
-            System.out.println("isB: " + isB + "%");
-            //System.out.println("\n\n\n");
-
-            //ToDO REMOVE!  This is obselete and will be done in the hill object itself
-            double dif = isA - isB;
-            if (dif < 0) {
-                dif = dif * -1;
-            }
-            //System.out.println(dif);
-            if (dif > 0.0) {
-                if (isA > isB) {
-                    countA++;
-                } else {
-                    countB++;
-                }
-            } else {
-                unsicher++;
-            }
-            //ToDO END of removal
+            curentCharacteristic++;
         }
-
-
-        //ToDO move this to a Print method which runs through each tested Hill
-        System.out.println("Als A erkannt: " + countA);
-        System.out.println("Als B erkannt: " + countB);
-        System.out.println("Nicht sicher : " + unsicher);
-        curentCharacteristic++;
     }
 }
