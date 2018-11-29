@@ -200,7 +200,7 @@ class Hill {
             }
             //Recognise if its still the part of the hilltop and mark it as such
             if(newPointOnHill < this.hilltopHeight + this.maxDifferenceToHilltop && newPointOnHill > this.hilltopHeight - this.maxDifferenceToHilltop){ //Still on Plateau?
-                data[x][y] = this.colorTop;
+               // data[x][y] = this.colorTop;
                 pointsOnHilltopCount++;
                 return markHill(x, y, xOffset, yOffset, newPointOnHill, ++distance); //Recursion for this direction
             }else {
@@ -210,12 +210,12 @@ class Hill {
                     tilts.add(tilt);
                     //Recognize if its still steep enough
                     if (tilt < this.minAvgHeightDifference) {
-                        this.data[x][y] = this.colorEndOfSlope;
+                        //this.data[x][y] = this.colorEndOfSlope;
                         pointsAfterSlopeCount++;
                         return markHill(x, y, xOffset, yOffset, newPointOnHill, ++distance); //Recursion for steepness
                     } else {
                         pointsOnSlopeCount++;
-                        this.data[x][y] = this.colorSlope;
+                        //this.data[x][y] = this.colorSlope;
                         return markHill(x, y, xOffset, yOffset, newPointOnHill, ++distance);
                     }
                 }

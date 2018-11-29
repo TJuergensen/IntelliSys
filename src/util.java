@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 public class util {
 
     //"Defines"
-    public static int characteristicCount = 1;
+    public static int characteristicCount = 2;
     //These are used as kind of enum
     public static final int A = 0;
     public static final int B = 1;
@@ -33,7 +33,7 @@ public class util {
     public static void classify(List<Hill> trainingsSetA, List<Hill> trainingsSetB, List<Hill> toClassify) //This method will run all classification-tests
     {
         Function<Hill, Double> relativeHeight = (hill) -> hill.getRelativeHilltopHeight();          //Gutes kreterium
-        //Function<Hill, Double> tilt = (hill) -> hill.getAvgTilt();                                  //Nicht geeignet
+        Function<Hill, Double> tilt = (hill) -> hill.getAvgTilt();                                  //Nicht geeignet
         //Function<Hill, Double> pointsOnHilltop = (hill) ->(double) hill.getPointsOnHilltopCount();  //Nicht gut zum Klassifizieren
         //Function<Hill, Double> pointsOnSlope = (hill) ->(double) hill.getPointsOnSlopeCount();      //Gutes kreterium, aber praktisch relativeheight ?
         //Function<Hill, Double> pointsAfterSlope = (hill) ->(double) hill.getPointsAfterSlopeCount();//Nicht gut zum Klassifizieren
@@ -42,7 +42,7 @@ public class util {
         //Function<Hill, Double> maxHilltopShift = (hill) ->(double) hill.getMaxHilltopShift();       //Nicht geeignet //TODO für shift ende ende der slope betrachten
 
         classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, relativeHeight);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, tilt);
+        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, tilt);
         //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnHilltop);
         //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnSlope);
         //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsAfterSlope);

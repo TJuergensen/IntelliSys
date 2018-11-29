@@ -13,6 +13,7 @@ public class Main {
     static String trainingsSetB_path     = "src\\input\\B0.csv";
     static String toClassify_path  = "src\\input\\A1.csv";
     static String dataPath  = "src\\input\\data.csv";
+
     static ArrayList<Hill> trainingsSet_B, trainingsSet_A, toClassify;
 
     public static void main(String[] args) throws IOException {
@@ -23,7 +24,7 @@ public class Main {
             savePath  = "hilldetectiontest.png";
             trainingsSetA_path = "A0.csv";
             trainingsSetB_path = "B0.csv";
-            toClassify_path ="B0.csv";
+            toClassify_path ="A1.csv";
             dataPath  = "data.csv";
         }
         //load Data
@@ -38,8 +39,8 @@ public class Main {
         int countUncertain=0;
         for(Hill h: toClassify)
         {
-            h.calculateObjectType();
-            switch (h.getClassification()) {
+
+            switch (h.calculateObjectType()) {
                 case util.A:
                     countA++;
                     break;
