@@ -1,7 +1,6 @@
 package logic;
 
 import Utility.util;
-
 import java.util.ArrayList;
 
 /**
@@ -12,8 +11,10 @@ public class Hill {
     private int classification; //Is used to store if the hill is A or B or undefined
 
     //Variables that change the color in the image
-    private final String colorA = "16776960";
-    private final String colorB = "16711680"; // RED
+    private static boolean printImage = true;
+    private final String colorA = "16776960";   //Yellow
+    private final String colorB = "16711680";   // RED
+    private final String colorUndefined = "2287";      //Blue
     private String colorTop;
     private final String colorEndOfSlope = "0";
     private final String colorSlope = "16777215";
@@ -135,6 +136,7 @@ public class Hill {
                 this.colorTop= colorB;
                 break;
             case util.UNCERTAIN:
+                this.colorTop= colorUndefined;
                 break;
         }
 
@@ -174,21 +176,21 @@ public class Hill {
             }
             //Recognise if its still the part of the hilltop and mark it as such
             if(newPointOnHill < this.hilltopHeight + this.maxDifferenceToHilltop && newPointOnHill > this.hilltopHeight - this.maxDifferenceToHilltop){ //Still on Plateau?
-               // data[x][y] = this.colorTop;
+               if(printImage) {data[x][y] = this.colorTop;}
                 markHill(x, y, xOffset, yOffset, newPointOnHill, ++distance); //Recursion for this direction
                 return;
             }else {
                 //Recognise if the new position is part of the slope
                 if (newPointOnHill < oldPointOnHill) {
-                    Double tilt = (oldPointOnHill - newPointOnHill) / 2;
+                    double tilt = (oldPointOnHill - newPointOnHill) / 2;
                     //Recognize if its still steep enough
                     if (tilt < this.minAvgHeightDifference) {
-                        //this.data[x][y] = this.colorEndOfSlope;
+                        if(printImage) {this.data[x][y] = this.colorEndOfSlope;}
                         markHill(x, y, xOffset, yOffset, newPointOnHill, ++distance); //Recursion for steepness
                         return;
                     } else {
                         pointsOnSlopeCount++;
-                        //this.data[x][y] = this.colorSlope;
+                        if(printImage) {this.data[x][y] = this.colorSlope;}
                         markHill(x, y, xOffset, yOffset, newPointOnHill, ++distance);
                         return;
                     }
@@ -223,4 +225,11 @@ public class Hill {
         return relativeHilltopHeight;
     }
 
+    /**
+     * Returns if printing is Enabled ?
+     * @return Returns if printing is enabled
+     */
+    public static boolean isPrintImageEnabled() {
+        return printImage;
+    }
 }

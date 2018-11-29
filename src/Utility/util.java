@@ -54,7 +54,6 @@ public class util {
                                     .average()
                                     .getAsDouble();
         double isA, isB;
-
         for (Hill h : toClassify) {
             isA = util.testAverage(trainingsSetA, avgA, getAvgFromHill.apply(h), getAvgFromHill);
             h.setProbability(curentCharacteristic, A, isA);

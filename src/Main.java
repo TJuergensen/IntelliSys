@@ -7,9 +7,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-
+/**
+ * Is used to Classifies hills. Trains automatically.
+ * For more Information visit https://lernraum.th-luebeck.de/mod/assign/view.php?id=96767
+ */
 public class Main {
     static String savePath  = "src\\output\\hilldetectiontest.png";
     static String trainingsSetA_path     = "src\\input\\A0.csv";
@@ -17,8 +21,16 @@ public class Main {
     static String toClassify_path  = "src\\input\\A1.csv";
     static String dataPath  = "src\\input\\data.csv";
 
-    static ArrayList<Hill> trainingsSet_B, trainingsSet_A, toClassify;
+    static ArrayList<Hill> trainingsSet_B = new ArrayList<>();
+    static ArrayList<Hill> trainingsSet_A = new ArrayList<>();
+    static ArrayList<Hill> toClassify = new ArrayList<>();
 
+    /**
+     * Is used to Classifies hills. Trains automatically.
+     * For more Information visit https://lernraum.th-luebeck.de/mod/assign/view.php?id=96767
+     * @param args //Test Params that aren't used
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         String os = System.getProperty("os.name").toLowerCase();
 
@@ -32,10 +44,11 @@ public class Main {
         }
         //load Data
         String[][] data = loadDATA();
-        load(data);
-        
-        //Print image
-        //printData(data);
+        load(data, trainingsSet_A, trainingsSetA_path, util.A);
+        load(data, trainingsSet_B, trainingsSetB_path, util.B);
+        load(data, toClassify, toClassify_path, util.UNCERTAIN);
+
+        if(Hill.isPrintImageEnabled()) printData(data);
 
 
         util.classify(trainingsSet_A, trainingsSet_B, toClassify);
@@ -61,14 +74,18 @@ public class Main {
         System.out.println("A: " + countA + "\nB: "+countB +"\nUnsicher: "+countUncertain);
     }
 
+    /**
+     * Creates an Image from the data in which the hills are marked
+     * @param data The data which will be converted in to a PNG
+     * @throws IOException
+     */
     private static void printData(String[][] data) throws IOException {
         File file = new File(savePath);
         int w = data.length;
         int h = data[0].length;
         int type = BufferedImage.TYPE_INT_RGB;
         BufferedImage image = new BufferedImage(w, h, type);
-
-        Double a;
+        double a;
         int b;
         for(int y = 0; y < h; y++) {
             for(int x = 0; x < w; x++) {
@@ -82,25 +99,28 @@ public class Main {
         ImageIO.write(image, "PNG", file);
     }
 
-    private static void load(String[][] data) throws IOException {
-        trainingsSet_A = new ArrayList<Hill>();
-        trainingsSet_B = new ArrayList<Hill>();
-        toClassify = new ArrayList<Hill>();
+    /**
+     * Loads the position of the hills out of an csv file
+     * @param data The data in which the hill is located
+     * @param hills List in which the new Hills will be saved
+     * @param path  The File Path where the csv is located
+     * @param classification Declares if the Hills are from Type A or B or still undefined
+     * @throws IOException
+     */
+    private static void load(String[][] data, List<Hill> hills, String path, int classification) throws IOException{
+        Scanner scanner = new Scanner(new File(path));
+        scanner.useDelimiter(",");
 
-
-        Scanner scannerTSA = new Scanner(new File(trainingsSetA_path));
-        scannerTSA.useDelimiter(",");
-               
         String dummy;
         String[] k;
         String x = "";
         String y;
-        while(scannerTSA.hasNext()){
-            dummy = scannerTSA.next();
+        while(scanner.hasNext()){
+            dummy = scanner.next();
             if(dummy.contains("\n")) {
                 k = dummy.split("\\r?\\n");
                 y = k[0];
-                trainingsSet_A.add(new Hill(data, Integer.parseInt(x), Integer.parseInt(y), util.A));
+                hills.add(new Hill(data, Integer.parseInt(x), Integer.parseInt(y), classification));
                 if(k.length == 2) {
                     x = k[1];
                 }
@@ -108,46 +128,15 @@ public class Main {
                 x = dummy;
             }
         }
-        scannerTSA.close();
+        scanner.close();
 
-        Scanner scannerTSB = new Scanner(new File(trainingsSetB_path));
-        scannerTSB.useDelimiter(",");
-
-        while(scannerTSB.hasNext()){
-            dummy = scannerTSB.next();
-            if(dummy.contains("\n")) {
-                k = dummy.split("\\r?\\n");
-                y = k[0];
-                trainingsSet_B.add(new Hill(data, Integer.parseInt(x), Integer.parseInt(y), util.B));
-                if(k.length == 2) {
-                    x = k[1];
-                }
-            } else {
-                x = dummy;
-            }
-        }
-        scannerTSB.close();
-
-        Scanner scannerTC = new Scanner(new File(toClassify_path));
-        scannerTC.useDelimiter(",");
-
-        while(scannerTC.hasNext()){
-            dummy = scannerTC.next();
-            if(dummy.contains("\n")) {
-                k = dummy.split("\\r?\\n");
-                y = k[0];
-                toClassify.add(new Hill(data, Integer.parseInt(x), Integer.parseInt(y), util.UNCERTAIN));
-                if(k.length == 2) {
-                    x = k[1];
-                }
-            } else {
-                x = dummy;
-            }
-        }
-        scannerTC.close();
-        
     }
 
+    /**
+     * Loads and saves the data in which the hills are located
+     * @return Returns the loaded data
+     * @throws FileNotFoundException
+     */
     private static String[][] loadDATA() throws FileNotFoundException {
         Scanner scanner = new Scanner(new File(dataPath));
         scanner.useDelimiter(",");
