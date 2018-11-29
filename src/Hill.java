@@ -27,7 +27,9 @@ class Hill {
     private ArrayList<Double> endOfHillHeights = new ArrayList();
     private double minHeightHillEndPoint; //nicht klassifizieren
     private double maxHeightHillEndPoint;  //nicht klassifizieren
-    private double avgHeightHillEndPoints;  //toDO klassifizieren?
+    private double avgHeightHillEndPoints;  //Wird Klassifiziert
+
+    private  double maxHilltopShift = 0;
 
     private int pointsOnHilltopCount = 0;   //Wird Klassifiziert
     private int pointsOnSlopeCount = 0;     //Wird Klassifiziert
@@ -116,12 +118,23 @@ class Hill {
         calculateAvgDistanceHilltopAndEndOfHill();
         calculateAvgHeightBetweenBottomAndTop();
         calculateMinAndMaxHeightBetweenBottomAndTop();
-        calculateAvgTilt();
         relativeHilltopHeight = hilltopHeight - minHeightHillEndPoint;
+        calculateAvgTilt();
+        calculateMaxShift();
+    }
+
+    private void calculateMaxShift() {
+        double hilltopshift;
+        for(double d : distancesHilltopAndEndOfHill) {
+            hilltopshift = Math.abs(d -avgDistanceHilltopAndEndOfHill);
+            if(hilltopshift > maxHilltopShift) {
+                maxHilltopShift = hilltopshift;
+            }
+        }
     }
 
     private void calculateAvgTilt() {
-        this.avgTilt = this.tilts.stream().mapToDouble(d -> d).average().getAsDouble();
+        this.avgTilt = Math.sin(relativeHilltopHeight / avgDistanceHilltopAndEndOfHill);
     }
 
     private void  calculateMinAndMaxHeightBetweenBottomAndTop() {
@@ -256,5 +269,13 @@ class Hill {
 
     public double getRelativeHilltopHeight() {
         return relativeHilltopHeight;
+    }
+
+    public double getHilltopHeight() {
+        return hilltopHeight;
+    }
+
+    public double getMaxHilltopShift() {
+        return maxHilltopShift;
     }
 }

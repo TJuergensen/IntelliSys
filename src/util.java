@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 public class util {
 
     //"Defines"
-    public static int characteristicCount = 5;
+    public static int characteristicCount = 1;
     //These are used as kind of enum
     public static final int A = 0;
     public static final int B = 1;
@@ -15,12 +15,12 @@ public class util {
     public static final double UNCERTAINITYRANGE = 0.6; //Range in which A and B need to be to be uncertain if it is A or B. WITHIN this range = uncertain
 
 
-    public static double testAverage(List<Hill> list, double avgFromTestSet, double avgFromTestedObject) {
+    public static double testAverage(List<Hill> list, double avgFromTestSet, double avgFromTestedObject, Function<Hill, Double> getAvgFromHill) {
         double count = 0; //this hill is relativlely close to this many hills from the trainingsSet (avg)
         double dif = Math.abs(avgFromTestSet - avgFromTestedObject);
         double diftest;
         for(Hill h : list) {
-            diftest = Math.abs(avgFromTestSet - h.getRelativeHilltopHeight());
+            diftest = Math.abs(avgFromTestSet - getAvgFromHill.apply(h));
 
             if(dif < diftest) {
                 count++;
@@ -32,17 +32,23 @@ public class util {
 
     public static void classify(List<Hill> trainingsSetA, List<Hill> trainingsSetB, List<Hill> toClassify) //This method will run all classification-tests
     {
-        Function<Hill, Double> relativeHeight = (hill) -> hill.getRelativeHilltopHeight();
-        Function<Hill, Double> relativeTilt = (hill) -> hill.getAvgTilt();
-        Function<Hill, Double> pointsOnHilltop = (hill) ->(double) hill.getPointsOnHilltopCount();
-        Function<Hill, Double> pointsOnSlope = (hill) ->(double) hill.getPointsOnSlopeCount();
-        Function<Hill, Double> pointsAfterSlope = (hill) ->(double) hill.getPointsAfterSlopeCount();
+        Function<Hill, Double> relativeHeight = (hill) -> hill.getRelativeHilltopHeight();          //Gutes kreterium
+        Function<Hill, Double> tilt = (hill) -> hill.getAvgTilt();                                  //Nicht geeignet
+        Function<Hill, Double> pointsOnHilltop = (hill) ->(double) hill.getPointsOnHilltopCount();  //Nicht gut zum Klassifizieren
+        Function<Hill, Double> pointsOnSlope = (hill) ->(double) hill.getPointsOnSlopeCount();      //Gutes kreterium, aber praktisch relativeheight ?
+        Function<Hill, Double> pointsAfterSlope = (hill) ->(double) hill.getPointsAfterSlopeCount();//Nicht gut zum Klassifizieren
+        Function<Hill, Double> hilltopHeight = (hill) ->(double) hill.getHilltopHeight();           //Kann vieleicht genutzt werden
+        Function<Hill, Double> height = (hill) ->(double) hill.getAvgHeightHillEndPoints();           //Kann man nutzen, aber eigetnlich kombination aus hilltopHeight - relativeHeight und
+        Function<Hill, Double> maxHilltopShift = (hill) ->(double) hill.getMaxHilltopShift();       //Nicht geeignet //TODO für shift ende ende der slope betrachten
 
-        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, relativeHeight);
-        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, relativeTilt);
-        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnHilltop);
-        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnSlope);
-        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsAfterSlope);
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, relativeHeight);
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, tilt);
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnHilltop);
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnSlope);
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsAfterSlope);
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, height);
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, hilltopHeight);
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, maxHilltopShift);
     }
 
 
@@ -63,13 +69,13 @@ public class util {
         int unsicher = 0;
 
         for (Hill h : trainingsSetA) { //ToDO Change trainingsSetA to toClassify
-            isA = util.testAverage(trainingsSetA, avgA, getAvgFromHill.apply(h));
+            isA = util.testAverage(trainingsSetA, avgA, getAvgFromHill.apply(h), getAvgFromHill);
             //System.out.println(getAvgFromHill.apply(h));
             h.setProbability(0, A, isA);
-            //System.out.println("isA: " + isA + "%");
-            isB = util.testAverage(trainingsSetB, avgB, getAvgFromHill.apply(h));
+            System.out.println("isA: " + isA + "%");
+            isB = util.testAverage(trainingsSetB, avgB, getAvgFromHill.apply(h), getAvgFromHill);
             h.setProbability(0, B, isB);
-            //System.out.println("isB: " + isB + "%");
+            System.out.println("isB: " + isB + "%");
             //System.out.println("\n\n\n");
 
             //ToDO REMOVE!  This is obselete and will be done in the hill object itself
@@ -77,7 +83,8 @@ public class util {
             if (dif < 0) {
                 dif = dif * -1;
             }
-            if ((isA > 0.5 || isB > 0.5) && dif > 0.3) {
+            //System.out.println(dif);
+            if (dif > 0.2) {
                 if (isA > isB) {
                     countA++;
                 } else {
