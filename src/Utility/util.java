@@ -70,7 +70,8 @@ public class util {
             h.setProbability(curentCharacteristic, A, isA);
             isB = util.testAverage(trainingsSetB, avgB, getAvgFromHill.apply(h), getAvgFromHill);
             h.setProbability(curentCharacteristic, B, isB);
-            curentCharacteristic++;
+
         }
+        curentCharacteristic++;
     }
 }
