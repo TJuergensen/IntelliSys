@@ -64,16 +64,16 @@ public class Hill {
     public int calculateObjectType() {
         int ret = util.UNCERTAIN;
 
-        double probabilityA =0.0;
-        double probabilityB =0.0;
+        double probabilityA =1.0;
+        double probabilityB =1.0;
         //count probabilities
         for(int i=0; i<util.characteristicCount; i++){
-            probabilityA += probabilityList[i][util.A];
-            probabilityB += probabilityList[i][util.B];
+            probabilityA *= probabilityList[i][util.A];
+            probabilityB *= probabilityList[i][util.B];
         }
         //normalize probabilities
-        probabilityA /= util.characteristicCount;
-        probabilityB /= util.characteristicCount;
+        //probabilityA /= util.characteristicCount;
+        //probabilityB /= util.characteristicCount;
 
         //Check if we can be kind of sure this object is assignable
         double range = Math.abs(probabilityA-probabilityB);
