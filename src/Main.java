@@ -15,21 +15,21 @@ import java.util.Scanner;
  * For more Information visit https://lernraum.th-luebeck.de/mod/assign/view.php?id=96767
  */
 public class Main {
-    static String savePath  = "src\\output\\hilldetectiontest.png";
-    static String trainingsSetA_path     = "src\\input\\A0.csv";
-    static String trainingsSetB_path     = "src\\input\\B0.csv";
-    static String toClassify_path  = "src\\input\\A1.csv";
-    static String dataPath  = "src\\input\\data.csv";
+    private static String savePath  = "src\\output\\hilldetectiontest.png";
+    private static String trainingsSetA_path     = "src\\input\\A0.csv";
+    private static String trainingsSetB_path     = "src\\input\\B0.csv";
+    private static String toClassify_path  = "src\\input\\A1.csv";
+    private static String dataPath  = "src\\input\\data.csv";
 
-    static ArrayList<Hill> trainingsSet_B = new ArrayList<>();
-    static ArrayList<Hill> trainingsSet_A = new ArrayList<>();
-    static ArrayList<Hill> toClassify = new ArrayList<>();
+    private static ArrayList<Hill> trainingsSet_B = new ArrayList<>();
+    private static ArrayList<Hill> trainingsSet_A = new ArrayList<>();
+    private static ArrayList<Hill> toClassify = new ArrayList<>();
 
     /**
      * Is used to Classifies hills. Trains automatically.
      * For more Information visit https://lernraum.th-luebeck.de/mod/assign/view.php?id=96767
      * @param args //Test Params that aren't used
-     * @throws IOException
+     * @throws IOException Throws an IOException while reading a file
      */
     public static void main(String[] args) throws IOException {
         String os = System.getProperty("os.name").toLowerCase();
@@ -77,7 +77,7 @@ public class Main {
     /**
      * Creates an Image from the data in which the hills are marked
      * @param data The data which will be converted in to a PNG
-     * @throws IOException
+     * @throws IOException Throws an IOException while reading a file
      */
     private static void printData(String[][] data) throws IOException {
         File file = new File(savePath);
@@ -105,7 +105,7 @@ public class Main {
      * @param hills List in which the new Hills will be saved
      * @param path  The File Path where the csv is located
      * @param classification Declares if the Hills are from Type A or B or still undefined
-     * @throws IOException
+     * @throws IOException Throws an IOException while reading a file
      */
     private static void load(String[][] data, List<Hill> hills, String path, int classification) throws IOException{
         Scanner scanner = new Scanner(new File(path));
@@ -135,7 +135,7 @@ public class Main {
     /**
      * Loads and saves the data in which the hills are located
      * @return Returns the loaded data
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException Throws an IOException while reading a file
      */
     private static String[][] loadDATA() throws FileNotFoundException {
         Scanner scanner = new Scanner(new File(dataPath));

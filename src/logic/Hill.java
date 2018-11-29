@@ -52,7 +52,7 @@ public class Hill {
         this.hilltopHeight = Double.parseDouble(data[x][y]);
         markHill(x, y);
         calculate();
-        probabilityList = new double[util.characteristicCount][2];
+        probabilityList = new double[util.getCharacteristicCount()][2];
     }
 
     /**
@@ -75,7 +75,7 @@ public class Hill {
         double probabilityA =1.0;
         double probabilityB =1.0;
         //count probabilities
-        for(int i=0; i<util.characteristicCount; i++){
+        for(int i=0; i<util.getCharacteristicCount(); i++){
             probabilityA *= probabilityList[i][util.A];
             probabilityB *= probabilityList[i][util.B];
         }
