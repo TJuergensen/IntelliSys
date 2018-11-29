@@ -2,10 +2,9 @@ import java.util.ArrayList;
 
 class Hill {
 
-    private boolean isA;
     private final boolean printHillInfo = false; //Debug purposes
 
-    private int classification = util.UNCERTAIN;
+    private int classification;
 
     //Variables that change the color in the image
     private final String colorA = "16776960";
