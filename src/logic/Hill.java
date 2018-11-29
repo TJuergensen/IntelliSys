@@ -62,7 +62,7 @@ public class Hill {
     }
 
     public int calculateObjectType() {
-        int ret = util.UNCERTAIN;
+        int ret;
 
         double probabilityA =1.0;
         double probabilityB =1.0;
@@ -77,20 +77,14 @@ public class Hill {
 
         //Check if we can be kind of sure this object is assignable
         double range = Math.abs(probabilityA-probabilityB);
-        //for(int i=0; i< util.characteristicCount; i++) {
-          //  if (range > util.UNCERTAINITYRANGE[i]) {
-                //Check which is greater
+                //Check which is greater. == should be NEARLY impossible. BUT...here, this is the case.
                 if (probabilityA > probabilityB) {
                     ret = util.A;
                 } else {
                     ret = util.B;
                 }
 
-            //}
-        //}
-
-        classification = ret;
-        return ret;
+        return (classification=ret);
     }
 
     public int getClassification()

@@ -8,7 +8,7 @@ import java.util.function.Function;
 public class util {
 
     //"Defines"
-    public static int characteristicCount = 1;
+    public static int characteristicCount = 3;
     //These are used as kind of enum
     public static final int A = 0;
     public static final int B = 1;
@@ -43,14 +43,14 @@ public class util {
         Function<Hill, Double> height = (hill) ->(double) hill.getAvgHeightHillEndPoints();           //Kann man nutzen, aber eigetnlich kombination aus hilltopHeight - relativeHeight und
         Function<Hill, Double> maxHilltopShift = (hill) ->(double) hill.getMaxHilltopShift();       //Nicht geeignet //TODO für shift ende ende der slope betrachten
 
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, relativeHeight);
-        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, tilt);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnHilltop);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnSlope);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsAfterSlope);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, height);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, hilltopHeight);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, maxHilltopShift);
+        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, relativeHeight);
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, tilt); //absolute garbage
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnHilltop); //absolute garbage
+        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnSlope);
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsAfterSlope); //absolute garbage
+        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, height); //kinda good combination with rel-Height and pointsOnSlope
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, hilltopHeight); // not good
+        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, maxHilltopShift); // forget it
     }
 
 
