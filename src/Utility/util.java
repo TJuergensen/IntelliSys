@@ -1,6 +1,9 @@
+package Utility;
+
+import logic.Hill;
+
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 public class util {
 
@@ -14,7 +17,7 @@ public class util {
     public static int curentCharacteristic = 0;
 
     public static double testAverage(List<Hill> list, double avgFromTestSet, double avgFromTestedObject, Function<Hill, Double> getAvgFromHill) {
-        double count = 0; //this hill is relativlely close to this many hills from the trainingsSet (avg)
+        double count = 0; //this hill is relativlely close to count many hills from the trainingsSet (avg)
         double dif = Math.abs(avgFromTestSet - avgFromTestedObject);
         double diftest;
         for(Hill h : list) {

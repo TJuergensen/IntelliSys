@@ -1,6 +1,10 @@
+package logic;
+
+import Utility.util;
+
 import java.util.ArrayList;
 
-class Hill {
+public class Hill {
 
     private final boolean printHillInfo = false; //Debug purposes
 
@@ -43,7 +47,7 @@ class Hill {
     private double relativeHilltopHeight; //Wird Klassifiziert
     private double[][] probabilityList; //Stores probabilities. [][0] probability for A, [][1] probability for B
 
-    Hill(String[][] data, int x, int y, int classif) {
+    public Hill(String[][] data, int x, int y, int classif) {
         this.classification = classif;
         this.data = data;
         this.hilltopHeight = Double.parseDouble(data[x][y]);

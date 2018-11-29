@@ -1,3 +1,6 @@
+import Utility.util;
+import logic.Hill;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -33,6 +36,8 @@ public class Main {
         
         //Print image
         //printData(data);
+
+
         util.classify(trainingsSet_A, trainingsSet_B, toClassify);
         int countA=0;
         int countB=0;
