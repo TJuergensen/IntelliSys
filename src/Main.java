@@ -24,7 +24,7 @@ public class Main {
             savePath  = "hilldetectiontest.png";
             trainingsSetA_path = "A0.csv";
             trainingsSetB_path = "B0.csv";
-            toClassify_path ="A1.csv";
+            toClassify_path ="B1.csv";
             dataPath  = "data.csv";
         }
         //load Data

@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 public class util {
 
     //"Defines"
-    public static int characteristicCount = 2;
+    public static int characteristicCount = 8;
     //These are used as kind of enum
     public static final int A = 0;
     public static final int B = 1;
@@ -34,21 +34,21 @@ public class util {
     {
         Function<Hill, Double> relativeHeight = (hill) -> hill.getRelativeHilltopHeight();          //Gutes kreterium
         Function<Hill, Double> tilt = (hill) -> hill.getAvgTilt();                                  //Nicht geeignet
-        //Function<Hill, Double> pointsOnHilltop = (hill) ->(double) hill.getPointsOnHilltopCount();  //Nicht gut zum Klassifizieren
-        //Function<Hill, Double> pointsOnSlope = (hill) ->(double) hill.getPointsOnSlopeCount();      //Gutes kreterium, aber praktisch relativeheight ?
-        //Function<Hill, Double> pointsAfterSlope = (hill) ->(double) hill.getPointsAfterSlopeCount();//Nicht gut zum Klassifizieren
-        //Function<Hill, Double> hilltopHeight = (hill) ->(double) hill.getHilltopHeight();           //Kann vieleicht genutzt werden
-        //Function<Hill, Double> height = (hill) ->(double) hill.getAvgHeightHillEndPoints();           //Kann man nutzen, aber eigetnlich kombination aus hilltopHeight - relativeHeight und
-        //Function<Hill, Double> maxHilltopShift = (hill) ->(double) hill.getMaxHilltopShift();       //Nicht geeignet //TODO für shift ende ende der slope betrachten
+        Function<Hill, Double> pointsOnHilltop = (hill) ->(double) hill.getPointsOnHilltopCount();  //Nicht gut zum Klassifizieren
+        Function<Hill, Double> pointsOnSlope = (hill) ->(double) hill.getPointsOnSlopeCount();      //Gutes kreterium, aber praktisch relativeheight ?
+        Function<Hill, Double> pointsAfterSlope = (hill) ->(double) hill.getPointsAfterSlopeCount();//Nicht gut zum Klassifizieren
+        Function<Hill, Double> hilltopHeight = (hill) ->(double) hill.getHilltopHeight();           //Kann vieleicht genutzt werden
+        Function<Hill, Double> height = (hill) ->(double) hill.getAvgHeightHillEndPoints();           //Kann man nutzen, aber eigetnlich kombination aus hilltopHeight - relativeHeight und
+        Function<Hill, Double> maxHilltopShift = (hill) ->(double) hill.getMaxHilltopShift();       //Nicht geeignet //TODO für shift ende ende der slope betrachten
 
         classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, relativeHeight);
         classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, tilt);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnHilltop);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnSlope);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsAfterSlope);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, height);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, hilltopHeight);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, maxHilltopShift);
+        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnHilltop);
+        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnSlope);
+        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsAfterSlope);
+        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, height);
+        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, hilltopHeight);
+        classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, maxHilltopShift);
     }
 
 
@@ -71,10 +71,10 @@ public class util {
         for (Hill h : toClassify) { //ToDO Change trainingsSetA to toClassify
             isA = util.testAverage(trainingsSetA, avgA, getAvgFromHill.apply(h), getAvgFromHill);
             //System.out.println(getAvgFromHill.apply(h));
-            h.setProbability(0, A, isA);
+            h.setProbability(curentCharacteristic, A, isA);
             System.out.println("isA: " + isA + "%");
             isB = util.testAverage(trainingsSetB, avgB, getAvgFromHill.apply(h), getAvgFromHill);
-            h.setProbability(0, B, isB);
+            h.setProbability(curentCharacteristic, B, isB);
             System.out.println("isB: " + isB + "%");
             //System.out.println("\n\n\n");
 
