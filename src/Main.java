@@ -23,7 +23,7 @@ public class Main {
             savePath  = "hilldetectiontest.png";
             trainingsSetA_path = "A0.csv";
             trainingsSetB_path = "B0.csv";
-            toClassify_path ="A1.csv";
+            toClassify_path ="B0.csv";
             dataPath  = "data.csv";
         }
         //load Data
@@ -32,7 +32,27 @@ public class Main {
         
         //Print image
         //printData(data);
-        util.classify(trainingsSet_A, trainingsSet_B, null);
+        util.classify(trainingsSet_A, trainingsSet_B, toClassify);
+        int countA=0;
+        int countB=0;
+        int countUncertain=0;
+        for(Hill h: toClassify)
+        {
+            h.calculateObjectType();
+            switch (h.getClassification()) {
+                case util.A:
+                    countA++;
+                    break;
+                case util.B:
+                    countB++;
+                    break;
+                case util.UNCERTAIN:
+                    countUncertain++;
+                    break;
+            }
+        }
+
+        System.out.println("A: " + countA + "\nB: "+countB +"\nUnsicher: "+countUncertain);
     }
 
     private static void printData(String[][] data) throws IOException {

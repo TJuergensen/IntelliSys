@@ -74,17 +74,17 @@ class Hill {
 
         //Check if we can be kind of sure this object is assignable
         double range = Math.abs(probabilityA-probabilityB);
-        if(range > util.UNCERTAINITYRANGE)
-        {
-            //Check which is greater
-            if(probabilityA>probabilityB)
-            {
-                ret = util.A;
-            } else {
-                ret = util.B;
-            }
+        //for(int i=0; i< util.characteristicCount; i++) {
+          //  if (range > util.UNCERTAINITYRANGE[i]) {
+                //Check which is greater
+                if (probabilityA > probabilityB) {
+                    ret = util.A;
+                } else {
+                    ret = util.B;
+                }
 
-        }
+            //}
+        //}
 
         classification = ret;
         return ret;
