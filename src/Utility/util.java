@@ -35,22 +35,12 @@ public class util {
     {
         //TODO nu zu double carten wenn es noetig ist
         Function<Hill, Double> relativeHeight = (hill) -> hill.getRelativeHilltopHeight();          //Gutes kreterium
-        Function<Hill, Double> tilt = (hill) -> hill.getAvgTilt();                                  //Nicht geeignet
-        Function<Hill, Double> pointsOnHilltop = (hill) ->(double) hill.getPointsOnHilltopCount();  //Nicht gut zum Klassifizieren
         Function<Hill, Double> pointsOnSlope = (hill) ->(double) hill.getPointsOnSlopeCount();      //Gutes kreterium, aber praktisch relativeheight ?
-        Function<Hill, Double> pointsAfterSlope = (hill) ->(double) hill.getPointsAfterSlopeCount();//Nicht gut zum Klassifizieren
-        Function<Hill, Double> hilltopHeight = (hill) ->(double) hill.getHilltopHeight();           //Kann vieleicht genutzt werden
         Function<Hill, Double> height = (hill) ->(double) hill.getAvgHeightHillEndPoints();           //Kann man nutzen, aber eigetnlich kombination aus hilltopHeight - relativeHeight und
-        Function<Hill, Double> maxHilltopShift = (hill) ->(double) hill.getMaxHilltopShift();       //Nicht geeignet //TODO für shift ende ende der slope betrachten
 
         classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, relativeHeight);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, tilt); //absolute garbage
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnHilltop); //absolute garbage
         classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsOnSlope);
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, pointsAfterSlope); //absolute garbage
         classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, height); //kinda good combination with rel-Height and pointsOnSlope
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, hilltopHeight); // not good
-        //classifyWithAvg(trainingsSetA, trainingsSetB, toClassify, maxHilltopShift); // forget it
     }
 
 
