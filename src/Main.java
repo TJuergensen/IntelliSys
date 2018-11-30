@@ -48,7 +48,10 @@ public class Main {
         load(data, trainingsSet_B, trainingsSetB_path, util.B);
         load(data, toClassify, toClassify_path, util.UNCERTAIN);
 
-        if(Hill.isPrintImageEnabled()) printData(data);
+        if(Hill.isPrintImageEnabled()) {
+            printData(data);
+            return;
+        }
 
 
         util.classify(trainingsSet_A, trainingsSet_B, toClassify);
@@ -97,6 +100,7 @@ public class Main {
             }
         }
         ImageIO.write(image, "PNG", file);
+        System.out.println("Image created");
     }
 
     /**

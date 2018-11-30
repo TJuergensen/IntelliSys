@@ -10,8 +10,12 @@ public class Hill {
 
     private int classification; //Is used to store if the hill is A or B or undefined
 
-    //Variables that change the color in the image
-    private static boolean printImage = true;
+    /*
+    printImage
+    IMPORTANT!!! if true, it changes the the values in the data and the classification is turned off.
+    For classification this needs to be false
+     */
+    private static boolean printImage = false;
     private final String colorA = "16776960";           //Yellow
     private final String colorB = "16711680";           //RED
     private final String colorUndefined = "2287";       //Blue
