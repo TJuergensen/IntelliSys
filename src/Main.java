@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Is used to Classifies hills. Trains automatically.
+ * Is used to vlassify hills. Trains automatically.
  * For more Information visit https://lernraum.th-luebeck.de/mod/assign/view.php?id=96767
  */
 public class Main {
@@ -26,10 +26,10 @@ public class Main {
     private static ArrayList<Hill> toClassify = new ArrayList<>();
 
     /**
-     * Is used to Classifies hills. Trains automatically.
+     * Is used to classify hills. Trains automatically.
      * For more Information visit https://lernraum.th-luebeck.de/mod/assign/view.php?id=96767
-     * @param args //Test Params that aren't used
-     * @throws IOException Throws an IOException while reading a file
+     * @param args Test Parameters. Is not used
+     * @throws IOException May throw an IOException while reading a file
      */
     public static void main(String[] args) throws IOException {
         String os = System.getProperty("os.name").toLowerCase();
@@ -75,9 +75,9 @@ public class Main {
     }
 
     /**
-     * Creates an Image from the data in which the hills are marked
-     * @param data The data which will be converted in to a PNG
-     * @throws IOException Throws an IOException while reading a file
+     * Creates an image from the data with marked hills
+     * @param data The data which will be converted into a PNG file
+     * @throws IOException May throw an IOException while reading a file
      */
     private static void printData(String[][] data) throws IOException {
         File file = new File(savePath);
@@ -100,7 +100,7 @@ public class Main {
     }
 
     /**
-     * Loads the position of the hills out of an csv file
+     * Loads the position of the hills from a csv file
      * @param data The data in which the hill is located
      * @param hills List in which the new Hills will be saved
      * @param path  The File Path where the csv is located
@@ -135,7 +135,7 @@ public class Main {
     /**
      * Loads and saves the data in which the hills are located
      * @return Returns the loaded data
-     * @throws FileNotFoundException Throws an IOException while reading a file
+     * @throws FileNotFoundException May throw an IOException while reading a file
      */
     private static String[][] loadDATA() throws FileNotFoundException {
         Scanner scanner = new Scanner(new File(dataPath));

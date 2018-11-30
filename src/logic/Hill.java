@@ -12,36 +12,36 @@ public class Hill {
 
     //Variables that change the color in the image
     private static boolean printImage = true;
-    private final String colorA = "16776960";   //Yellow
-    private final String colorB = "16711680";   // RED
-    private final String colorUndefined = "2287";      //Blue
+    private final String colorA = "16776960";           //Yellow
+    private final String colorB = "16711680";           //RED
+    private final String colorUndefined = "2287";       //Blue
     private String colorTop;
     private final String colorEndOfSlope = "0";
     private final String colorSlope = "16777215";
 
-    //Variables that change the result
+    //Variables to play with
     private final int maxX = 3000;  //The horizontel max of our data array
     private final int maxY = 4943;  //The vertical max of our data array
 
-    //If the slope tilt falls under this falue, its the end of the slope
+    //If the slope tilt falls under this value, its the end of the slope
     private final double minAvgHeightDifference = 0.3;
-    //The max fiferenc to our hilltopHeight, which indicates where the hilltop is located
+    //The max difference to our hilltopHeight, which indicates where the hilltop is located
     private final double maxDifferenceToHilltop = 2.0;
     private String[][] data;    //The Reference to the data array where our hill is located
 
     //Structures to save all data
     private double hilltopHeight; //The height value of the hill from the start position
-    //The height of all the endpoints from our hilldetectio
+    //The height of all the endpoints from the hilldetection
     private ArrayList<Double> endOfHillHeights = new ArrayList();
     private double minHeightHillEndPoint;
     private double avgHeightHillEndPoints;
     private int pointsOnSlopeCount = 0;     //The lenght of the slope in our data
-    private double relativeHilltopHeight; //The relative height of the hill compared to it surroundings
-    private double[][] probabilityList; //Stores probabilities. [][0] probability for A, [][1] probability for B
+    private double relativeHilltopHeight;   //The relative height of the hill compared to it surroundings
+    private double[][] probabilityList;     //Stores probabilities. [][0] probability for A, [][1] probability for B
 
     /**
      * Creates a Hill and finds and/or calculates all properties of the hill
-     * @param data A Referenc to the data array in which the hill is placed
+     * @param data A reference to the data array in which the hill is placed
      * @param x The horizontal start position of a hill in the data
      * @param y The vertical start position of a hill in the data
      * @param classif Should be A or B if the Hill is A or B and undefined if not classified yet.
@@ -72,6 +72,7 @@ public class Hill {
     public int calculateObjectType() {
         int ret;
 
+        //Start with 100%; multiplication will lower these values
         double probabilityA =1.0;
         double probabilityB =1.0;
         //count probabilities
@@ -80,7 +81,7 @@ public class Hill {
             probabilityB *= probabilityList[i][util.B];
         }
 
-        //Check which is greater. == should be NEARLY impossible. BUT...here, this is the case.
+        //Check which is greater. == should be NEARLY impossible. If equals, count for B. Happens with the used  characteristics.
         if (probabilityA > probabilityB) {
             ret = util.A;
         } else {
@@ -91,7 +92,7 @@ public class Hill {
     }
 
     /**
-     * From her, every calculation that is necessary for the hill gets called
+     * calls calculation methods for the hill data. Essentially needed for classification
      */
     private void calculate() {
         calculateAvgHeightBetweenBottomAndTop();
@@ -100,7 +101,7 @@ public class Hill {
     }
 
     /**
-     * Calculates the min height between the botton of the hill and its top
+     * Calculates the minimum height between the bottom of the hill and its top
      */
     private void  calculateMinHeightBetweenBottomAndTop() {
         double min = 1000000000;
@@ -114,7 +115,7 @@ public class Hill {
     }
 
     /**
-     * Calculates the avg height between all bottom positions and the hilltop
+     * Calculates the average height between all bottom positions and the hilltop
      */
     private void calculateAvgHeightBetweenBottomAndTop() {
         this.avgHeightHillEndPoints = endOfHillHeights.stream().mapToDouble(d -> d).average().getAsDouble();
@@ -142,7 +143,7 @@ public class Hill {
 
         int initDistance = 0;
 
-        // markhill in every direction
+        // mark hill in every direction
         for(int i = -1; i <= 1; i++) {
             for(int j = -1; j <= 1; j++) {
                 if(!(i == 0 && j == 0)) {
@@ -174,13 +175,13 @@ public class Hill {
                 endOfHillHeights.add(oldPointOnHill);
                 return;
             }
-            //Recognise if its still the part of the hilltop and mark it as such
+            //Recognize if its still the part of the hilltop and mark it as such
             if(newPointOnHill < this.hilltopHeight + this.maxDifferenceToHilltop && newPointOnHill > this.hilltopHeight - this.maxDifferenceToHilltop){ //Still on Plateau?
                if(printImage) {data[x][y] = this.colorTop;}
                 markHill(x, y, xOffset, yOffset, newPointOnHill, ++distance); //Recursion for this direction
                 return;
             }else {
-                //Recognise if the new position is part of the slope
+                //Recognize if the new position is part of the slope
                 if (newPointOnHill < oldPointOnHill) {
                     double tilt = (oldPointOnHill - newPointOnHill) / 2;
                     //Recognize if its still steep enough
@@ -202,7 +203,7 @@ public class Hill {
 
 
     /**
-     * Returns the avgHeightHillEndPoints
+     * Returns the average height of the hill ending points
      * @return Returns the avgHeightHillEndPoints
      */
     public double getAvgHeightHillEndPoints() {

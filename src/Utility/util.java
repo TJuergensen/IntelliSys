@@ -21,34 +21,34 @@ public class util {
 
     /**
      * Calculates the probability, if a hill is part of an of an already classified List of Hills.
-     * @param list The list with the hills the to classified hill is compared to
-     * @param avgFromTestSet The avg from a parameter from the list
-     * @param avgFromTestedObject The avg from the hill that needs to be classified
+     * @param toClassify The list with the hills the to classified hill is compared to
+     * @param avgFromTestSet The Average value of a parameter from the list
+     * @param avgFromTestedObject The Average value of the hill that needs to be classified
      * @param getAvgFromHill The function which returns the parameter, which is used for classification
-     * @return Returns the Probability that the hill could be part of the Hill list
+     * @return Returns the Probability to which classification class the tested Object is assignable
      */
-    private static double calculateAverage(List<Hill> list, double avgFromTestSet, double avgFromTestedObject, Function<Hill, Double> getAvgFromHill) {
+    private static double calculateAverage(List<Hill> toClassify, double avgFromTestSet, double avgFromTestedObject, Function<Hill, Double> getAvgFromHill) {
         double count = 0; //this hill is relativlely close to count many hills from the trainingsSet (avg)
         double dif = Math.abs(avgFromTestSet - avgFromTestedObject);
         double diftest;
-        for(Hill h : list) {
+        for(Hill h : toClassify) {
             diftest = Math.abs(avgFromTestSet - getAvgFromHill.apply(h));
 
             if(dif < diftest) {
                 count++;
             }
         }
-        return count/list.size();
+        return count/toClassify.size();
     }
 
 
     /**
      * Classifies Hills.
-     * First it trains with the trainingSets and than classifies the Hill in the toClassify List.
+     * First it trains with the trainingSets and then classifies the Hill in the toClassify List.
      * All functions for classification are implemented here
      * @param trainingsSetA The TrainingSet which only has Hills that are Classified as A
      * @param trainingsSetB The TrainingSet which only has Hills that are Classified as B
-     * @param toClassify The Hills that needs to be classified
+     * @param toClassify The Hills to be classified
      */
     public static void classify(List<Hill> trainingsSetA, List<Hill> trainingsSetB, List<Hill> toClassify) //This method will run all classification-tests
     {
@@ -66,7 +66,7 @@ public class util {
      * First it trains with the trainingSets and than classifies the Hill in the toClassify List.
      * @param trainingsSetA The TrainingSet which only has Hills that are Classified as A
      * @param trainingsSetB The TrainingSet which only has Hills that are Classified as B
-     * @param toClassify The Hills that needs to be classified
+     * @param toClassify The Hills to be classified
      * @param getAvgFromHill The Function with which the data trains, and after training classifies the toClassify hills
      */
     private static void classifyWithAvg(List<Hill> trainingsSetA, List<Hill> trainingsSetB, List<Hill> toClassify, Function<Hill,Double> getAvgFromHill) {
