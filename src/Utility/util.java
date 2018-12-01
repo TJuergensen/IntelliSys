@@ -12,7 +12,10 @@ public class util {
 
     //"Defines"
     private static int characteristicCount = 3; //Amount of used characteristics
-    //These are used as kind of enum
+
+    //These are used as kind of c-style-enum
+    //Only used for indexing and better understanding of the values 0,1,2.
+    //Full Java Enums are not needed and would just make the usage more complex
     public static final int A = 0;
     public static final int B = 1;
     public static final int UNCERTAIN = 2;
