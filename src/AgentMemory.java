@@ -14,10 +14,13 @@ public class AgentMemory {
     }
 
     public double getTrainingTruePositivRate() {
-        return trainingTruePositiv / (trainingTruePositiv + trainingFalsePositiv);
+        //TODO berechnung nicht jedes mal neu machen
+       return trainingTruePositiv / (Main.trainingSituationCount);
+        //return trainingTruePositiv / (trainingTruePositiv + trainingFalsePositiv);
     }
 
     public double getTrainingFalsePositivRate() {
-        return trainingFalsePositiv / (trainingTruePositiv + trainingFalsePositiv);
+        return trainingFalsePositiv / (Main.trainingSituationCount );
+        //return trainingFalsePositiv / (trainingTruePositiv + trainingFalsePositiv);
     }
 }
