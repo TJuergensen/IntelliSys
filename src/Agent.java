@@ -28,12 +28,12 @@ public class Agent {
     }
 
     private void RUN(){
-        System.out.println("Oh deer. Run, guys! RUN!");
+        //System.out.println("Oh deer. Run, guys! RUN!");
         isThreatening=true;
     }
 
     private void stayCalm(){
-        System.out.println("Meh...nothing to see here. BORING.");
+        //System.out.println("Meh...nothing to see here. BORING.");
         isThreatening = false;
     }
 

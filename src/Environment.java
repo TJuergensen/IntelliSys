@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import static java.lang.Math.round;
+
 public class Environment {
 
     private ArrayList<Agent> agents;
