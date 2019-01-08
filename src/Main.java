@@ -1,7 +1,7 @@
 public class Main {
     static int numberOfAgents = 20;
-    static int trainingSituationCount = 200;
-    static int realSituationCount = 10000;
+    static int trainingSituationCount = 2000;
+    static int realSituationCount = 1000;
 
 
 
@@ -80,23 +80,36 @@ public class Main {
         double avgLol = 0;
         for(Agent a : agents) {
             avgTruePositiv += a.getTruePositivRate();
-            System.out.println(avgTruePositiv);
+            //System.out.println(avgTruePositiv);
             avgFalsePositiv += a.getFalsePositivRate();
             avgTrainingTruePositiv += a.getTrainingTruePositivRate();
             avgTrainingFalsePositiv += a.getTrainingFalsePositivRate();
             avgLol += a.justeverypossiblenegative;
-            System.out.println( "Agend" + a.getAgentId() +
+            /*System.out.println( "Agend" + a.getAgentId() +
                                 "\n     Training True-PositivRate: " + a.getTrainingTruePositivRate() +
                                 "\n     Training False-PositivRate: " + a.getTrainingFalsePositivRate()+
                                 "\n     True-PositivRate: " + a.getTruePositivRate() +
                                 "\n     False-PositivRate: " + a.getFalsePositivRate()+
-                                "\n     justeverypossiblenegative: " + a.justeverypossiblenegative);
+                                "\n     justeverypossiblenegative: " + a.justeverypossiblenegative);*/
         }
         System.out.println("Avg Training True-Positiv: " + avgTrainingTruePositiv / agents.length +
                         "\nAvg Training False-Positiv: " + avgTrainingFalsePositiv / agents.length +
                         "\nAvg True-Positiv: " + avgTruePositiv / agents.length +
                         "\nAvg False-Positiv: " + avgFalsePositiv / agents.length +
                         "\nAvg justeverypossiblenegative: " + avgLol / agents.length);
+
+        int avgTP = 0;
+        for(int i : agents[0].quorumTestTP) {
+            avgTP += i;
+        }
+        avgTP /= agents[0].quorumTestTP.size();
+        int avgFP = 0;
+        for(int i : agents[0].quorumTestFP) {
+            avgFP += i;
+        }
+        avgFP /= agents[0].quorumTestFP.size();
+        System.out.println("Avg Agents needed for tp: " + avgTP);
+        System.out.println("Avg Agents needed for fp: " + avgFP);
     }
 
     private static Agent[] createAgents() {

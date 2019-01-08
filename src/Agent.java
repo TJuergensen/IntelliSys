@@ -1,6 +1,6 @@
 import org.uncommons.maths.random.GaussianGenerator;
-import java.util.Arrays;
-import java.util.Random;
+
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Agent {
@@ -15,7 +15,11 @@ public class Agent {
     private double truePositiv = 0.0;
     private double falsePositiv = 0.0;
     double justeverypossiblenegative = 0.0;
-    double quorum = 0.6;
+    List<Integer> quorumTestTP = new ArrayList<>();
+    List<Integer> quorumTestFP = new ArrayList<>();
+    double quorumTP = 0.3;
+    double quorumFP = 0.2;
+    int minAgents = 7;
     //Agent information about the World
 
     public Agent(int agentId, int agentCount) {
@@ -32,6 +36,8 @@ public class Agent {
     }
 
     public void observeWorld(Agent[] agents, boolean isDangerous) {
+        int tpCount = 0;
+        int fpCount = 0;
             if(isDangerous()) {
                 if(isDangerous) {
                     trainingTruePositiv++;
@@ -43,12 +49,19 @@ public class Agent {
                 if(a.isDangerous()) {
                     if(this != a) {
                         if (isDangerous) {
+                            tpCount++;
                             agentsRating[a.getAgentId()].addTruePositiv();
                         } else {
+                            fpCount++;
                             agentsRating[a.getAgentId()].addFalsePositiv();
                         }
                     }
                 }
+            }
+            if(isDangerous) {
+                quorumTestTP.add(tpCount);
+            }else {
+                quorumTestFP.add(fpCount);
             }
     }
 
@@ -58,9 +71,9 @@ public class Agent {
         for(Agent a : agents) {
             if(this != a) {
                 if (a.isDangerous()) {
-                    danger += agentsRating[a.getAgentId()].getTrainingTruePositivRate() - agentsRating[a.getAgentId()].getTrainingFalsePositivRate();
+                    danger += (agentsRating[a.getAgentId()].getTrainingTruePositivRate() - agentsRating[a.getAgentId()].getTrainingFalsePositivRate()) * (agentsRating[a.getAgentId()].getTrainingTruePositivRate() - agentsRating[a.getAgentId()].getTrainingFalsePositivRate());
                 } else {
-                    save += agentsRating[a.getAgentId()].getTrainingTruePositivRate() - agentsRating[a.getAgentId()].getTrainingFalsePositivRate();
+                    save += (agentsRating[a.getAgentId()].getTrainingTruePositivRate() - agentsRating[a.getAgentId()].getTrainingFalsePositivRate()) * (agentsRating[a.getAgentId()].getTrainingTruePositivRate() - agentsRating[a.getAgentId()].getTrainingFalsePositivRate());
                 }
             }
         }
@@ -74,30 +87,54 @@ public class Agent {
             justeverypossiblenegative++;
         }*/
 
-
-        /*
-        if (isDangerous) {
-
-            if((getTrainingTruePositivRate() < quorum+Main.globalTruePositiv) && (getTrainingTruePositivRate() > Main.globalTruePositiv-quorum)) {
-                if (isDangerous()) {
-                    truePositiv++;
+        List<Integer> randomAgents = new ArrayList<>();
+        for(int i = 0; i < agents.length; i++){
+            randomAgents.add(i);
+        }
+        boolean beliefISDangerous = false;
+        Collections.shuffle(randomAgents);
+        int beliefIsDangerousCount = 0;
+        int beliefISSaveCount = 0;
+        double minAgentsDummy = minAgents;
+        double minAgentsDummy2 = minAgents;
+        Agent a;
+        while(randomAgents.size() != 0) {
+            for (int i = 0; i < minAgentsDummy; i++) {
+                a = agents[randomAgents.remove(0)];
+                if (a.isDangerous()) {
+                    beliefIsDangerousCount++;
+                } else {
+                    beliefISSaveCount++;
                 }
+            }
+            if(minAgentsDummy == 1) {
+                minAgentsDummy2++;
+            }
+            if ((beliefIsDangerousCount / minAgentsDummy2) > quorumTP) {
+                beliefISDangerous = true;
+                break;
+            }
+            if ((beliefISSaveCount / minAgentsDummy2) > quorumFP) {
+                beliefISDangerous = false;
+                break;
+            }
+            minAgentsDummy = 1;
+        }
+        //System.out.println("tp:" + beliefIsDangerousCount / minAgentsDummy2);
+        //System.out.println("fp:" + beliefISSaveCount / minAgentsDummy2);
+        if(randomAgents.size() == 0) {
+            justeverypossiblenegative += 2000;
+            beliefISDangerous = isDangerous();
+        }
+
+        if(beliefISDangerous) {
+            if(isDangerous) {
+                truePositiv++;
+            }else {
+                falsePositiv++;
             }
         }else {
-            if((getTrainingFalsePositivRate() < quorum+ Main.globalFalsePositiv) && (getTrainingFalsePositivRate() > Main.globalFalsePositiv-quorum)) {
-                if (isDangerous()) {
-                    falsePositiv++;
-                }
-            }
-        }*/
-
-        if(isDangerous())
-        {
-            if(getTrainingFalsePositivRate() < Main.globalFalsePositiv+quorum && !isDangerous) {
-                falsePositiv++;
-            }else if(getTrainingFalsePositivRate() < Main.globalFalsePositiv+quorum && isDangerous) {
-                truePositiv++;
-            }
+            justeverypossiblenegative++;
         }
     }
 
