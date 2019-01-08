@@ -1,15 +1,10 @@
 public class Main {
-    static int numberOfAgents = 20;
-    static int trainingSituationCount = 2000;
-    static int realSituationCount = 1000;
-
-
-
-    public static double globalTruePositiv;
-    public static double globalFalsePositiv;
-
+    private static final int numberOfAgents = 20;
+    private static final int trainingSituationCount = 2000; //how many simulations the agents should train
+    private static final int realSituationCount = 1000;     //how many real situations should the agents face after training
     private static final double dangerousSituation = 7.0;
     private static final double saveSituation = 4.0;
+
     public static void main(String[] args){
         Agent[] agents = createAgents();
         simulate(agents);
@@ -18,41 +13,30 @@ public class Main {
     private static void simulate(Agent[] agents) {
 
         //Train with dangerous situations
-        for(int trainingSimulationNR = 0; trainingSimulationNR < trainingSituationCount; trainingSimulationNR++) {
-            //new save situation
+        for(int finishedTrainingSimulations = 0; finishedTrainingSimulations < trainingSituationCount; finishedTrainingSimulations++) {
+            //give avery agent the new situation
             for (Agent a : agents) {
                 a.newSituation(dangerousSituation);
             }
-            //observe other agents
+            //tell each agent to observe the world
             for (Agent a : agents) {
                 a.observeWorld(agents, true);
             }
         }
         //train with save situations
-        for(int trainingSimulationNR = 0; trainingSimulationNR < trainingSituationCount; trainingSimulationNR++) {
-            //new save situation
+        for(int finishedTrainingSimulations = 0; finishedTrainingSimulations < trainingSituationCount; finishedTrainingSimulations++) {
+            //give avery agent the new situation
             for (Agent a : agents) {
                 a.newSituation(saveSituation);
             }
-            //observe other agents
+            //tell each agent to observe the world
             for (Agent a : agents) {
                 a.observeWorld(agents, false);
             }
         }
 
-        globalTruePositiv = 0.0;
-        globalFalsePositiv= 0.0;
-        for(Agent a : agents)
-        {
-            globalTruePositiv += a.getTrainingTruePositivRate();
-            globalFalsePositiv += a.getTrainingFalsePositivRate();
-        }
-        globalTruePositiv /= agents.length;
-        globalFalsePositiv /= agents.length;
-
-
-        //Real
-        for(int realSimulationNR = 0; realSimulationNR < realSituationCount; realSimulationNR++) {
+        //After training test the agents on the real situations
+        for(int finishedRealSimulations = 0; finishedRealSimulations < realSituationCount; finishedRealSimulations++) {
             //new Situation
             for (Agent a : agents) {
                 a.newSituation(dangerousSituation);
@@ -62,7 +46,7 @@ public class Main {
                 a.isDangerousBasedOnWorld(agents, true);
             }
         }
-        for(int realSimulationNR = 0; realSimulationNR < realSituationCount; realSimulationNR++) {
+        for(int finishedRealSimulations = 0; finishedRealSimulations < realSituationCount; finishedRealSimulations++) {
             //new Situation
             for (Agent a : agents) {
                 a.newSituation(saveSituation);
@@ -73,43 +57,20 @@ public class Main {
             }
         }
 
-        double avgTruePositiv = 0;
-        double avgFalsePositiv = 0;
-        double avgTrainingTruePositiv = 0;
-        double avgTrainingFalsePositiv = 0;
-        double avgLol = 0;
+        double avgTruePositive = 0;
+        double avgFalsePositive = 0;
+        double avgTrainingTruePositive = 0;
+        double avgTrainingFalsePositive = 0;
         for(Agent a : agents) {
-            avgTruePositiv += a.getTruePositivRate();
-            //System.out.println(avgTruePositiv);
-            avgFalsePositiv += a.getFalsePositivRate();
-            avgTrainingTruePositiv += a.getTrainingTruePositivRate();
-            avgTrainingFalsePositiv += a.getTrainingFalsePositivRate();
-            avgLol += a.justeverypossiblenegative;
-            /*System.out.println( "Agend" + a.getAgentId() +
-                                "\n     Training True-PositivRate: " + a.getTrainingTruePositivRate() +
-                                "\n     Training False-PositivRate: " + a.getTrainingFalsePositivRate()+
-                                "\n     True-PositivRate: " + a.getTruePositivRate() +
-                                "\n     False-PositivRate: " + a.getFalsePositivRate()+
-                                "\n     justeverypossiblenegative: " + a.justeverypossiblenegative);*/
+            avgTruePositive += a.getTruePositiveRate();
+            avgFalsePositive += a.getFalsePositiveRate();
+            avgTrainingTruePositive += a.getTrainingTruePositiveRate();
+            avgTrainingFalsePositive += a.getTrainingFalsePositiveRate();
         }
-        System.out.println("Avg Training True-Positiv: " + avgTrainingTruePositiv / agents.length +
-                        "\nAvg Training False-Positiv: " + avgTrainingFalsePositiv / agents.length +
-                        "\nAvg True-Positiv: " + avgTruePositiv / agents.length +
-                        "\nAvg False-Positiv: " + avgFalsePositiv / agents.length +
-                        "\nAvg justeverypossiblenegative: " + avgLol / agents.length);
-
-        int avgTP = 0;
-        for(int i : agents[0].quorumTestTP) {
-            avgTP += i;
-        }
-        avgTP /= agents[0].quorumTestTP.size();
-        int avgFP = 0;
-        for(int i : agents[0].quorumTestFP) {
-            avgFP += i;
-        }
-        avgFP /= agents[0].quorumTestFP.size();
-        System.out.println("Avg Agents needed for tp: " + avgTP);
-        System.out.println("Avg Agents needed for fp: " + avgFP);
+        System.out.println("Avg Training True-Positive rate: " + avgTrainingTruePositive / agents.length +
+                        "\nAvg Training False-Positive rate: " + avgTrainingFalsePositive / agents.length +
+                        "\nAvg Real True-Positive rate: " + avgTruePositive / agents.length +
+                        "\nAvg Real False-Positive rate: " + avgFalsePositive / agents.length);
     }
 
     private static Agent[] createAgents() {
@@ -120,5 +81,13 @@ public class Main {
         }
 
         return ret;
+    }
+
+    static int getTrainingSituationCount() {
+        return trainingSituationCount;
+    }
+
+    static int getRealSituationCount() {
+        return realSituationCount;
     }
 }
