@@ -18,7 +18,7 @@ class Agent {
     private double falsePositive = 0.0; //count the false positive events in the real situations
     private final double quorumTP = 0.3; //The quorum that needs to be reached by the true positive rate
     private final double quorumFP = 0.2; //The quorum that needs to be reached by the false positive rate
-    private final int minAmountOfAgentIds = 7; //The min amount of agents that are used for evaluating the situation
+    private int minAmountOfAgentIds; //The min amount of agents that are used for evaluating the situation (35% of all agents)
 
     /**
      * Initialise the agent.
@@ -27,6 +27,7 @@ class Agent {
      * @param agentCount The amount of all agents that will be created
      */
     Agent(int agentId, int agentCount) {
+        minAmountOfAgentIds = (int)((agentCount / 100.0) * 35);
         this.agentId = agentId;
         this.agentsRating = new AgentMemory[agentCount];
         Arrays.fill(agentsRating, new AgentMemory());
