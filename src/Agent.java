@@ -3,6 +3,9 @@ import org.uncommons.maths.random.GaussianGenerator;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * An agent for "Entscheidungsfindung in einer Gruppe"
+ */
 class Agent {
     private int agentId;
     private double threshold;
@@ -17,6 +20,12 @@ class Agent {
     private final double quorumFP = 0.2; //The quorum that needs to be reached by the false positive rate
     private final int minAmountOfAgentIds = 7; //The min amount of agents that are used for evaluating the situation
 
+    /**
+     * Initialise the agent.
+     * Creates the standardDeviation and the threshold as required in the task-position
+     * @param agentId The ID that will be associated with the new agent
+     * @param agentCount The amount of all agents that will be created
+     */
     Agent(int agentId, int agentCount) {
         this.agentId = agentId;
         this.agentsRating = new AgentMemory[agentCount];
@@ -25,11 +34,22 @@ class Agent {
         threshold = ThreadLocalRandom.current().nextDouble(5.5, 8.5);
     }
 
+    /**
+     * Simulates a new Situation for the agent.
+     * @param situation The Value of the Situation, should be 4 or 7
+     */
     void newSituation(double situation) {
         GaussianGenerator gen = new GaussianGenerator(situation, standardDeviation, new Random());
         randomNumberZ = gen.nextValue();
     }
 
+    /**
+     * When called, the agent observes the world around him.
+     * He checks on how the other agents perform in the world.
+     * SHOULD ONLY BE USED WHILE TRAINING THE AGENTS
+     * @param agents The Agents he will observe
+     * @param isDangerous The Information on the dangerousness of the situation
+     */
     void observeWorld(Agent[] agents, boolean isDangerous) {
             if(isDangerous()) {
                 if(isDangerous) {
@@ -51,28 +71,14 @@ class Agent {
             }
     }
 
+    /**
+     * When called the agent decides if the world is dangerous based on the world around him.
+     * For the Details of the implementation, see the report of this project.
+     * SHOULD ONLY BE CALLED AFTER THE TRAINING OF THE AGENTS IN FINISHED
+     * @param agents The agents that are in the world around the agent
+     * @param isDangerous The Information on the dangerousness of the situation
+     */
     void isDangerousBasedOnWorld(Agent[] agents, boolean isDangerous) { //for real situazions.
-        /*
-        //Ursprüngliche idee.
-        double danger = 0.0;
-        double save = 0.0;
-        for(Agent a : agents) {
-            if(this != a) {
-                if (a.isDangerous()) {
-                    danger += agentsRating[a.getAgentId()].getTrainingTruePositiveRate() - agentsRating[a.getAgentId()].getTrainingFalsePositiveRate();
-                } else {
-                    save += agentsRating[a.getAgentId()].getTrainingTruePositiveRate() - agentsRating[a.getAgentId()].getTrainingFalsePositiveRate();
-                }
-            }
-        }
-        if(danger > save) {
-            if(isDangerous) {
-                truePositive++;
-            }else {
-                falsePositive++;
-            }
-        }*/
-
         List<Integer> randomAgentsIDs = new ArrayList<>();
         //generate a list with all agents ids
         for(int i = 0; i < agents.length; i++){
@@ -127,30 +133,74 @@ class Agent {
                 falsePositive++;
             }
         }
+
+
+        /*
+        The first Implementation we used. For more Information see the report of this project
+        double danger = 0.0;
+        double save = 0.0;
+        for(Agent a : agents) {
+            if(this != a) {
+                if (a.isDangerous()) {
+                    danger += agentsRating[a.getAgentId()].getTrainingTruePositiveRate() - agentsRating[a.getAgentId()].getTrainingFalsePositiveRate();
+                } else {
+                    save += agentsRating[a.getAgentId()].getTrainingTruePositiveRate() - agentsRating[a.getAgentId()].getTrainingFalsePositiveRate();
+                }
+            }
+        }
+        if(danger > save) {
+            if(isDangerous) {
+                truePositive++;
+            }else {
+                falsePositive++;
+            }
+        }*/
     }
 
-
-
+    /**
+     * The agent decides based on his sensors if the world is dangerous
+     * @return Returns the decision if the world is dangerous or not
+     */
     private boolean isDangerous() {
         return  randomNumberZ > threshold;
     }
 
+    /**
+     * Returns the True Positive rate from the training of this agent
+     * @return Returns the True Positive rate from the training of this agent
+     */
     double getTrainingTruePositiveRate() {
         return trainingTruePositive / Main.getTrainingSituationCount();
     }
 
+    /**
+     * Returns the False Positive rate from the training of this agent
+     * @return Returns the False Positive rate from the training of this agent
+     */
     double getTrainingFalsePositiveRate() {
         return trainingFalsePositive / (Main.getTrainingSituationCount());
     }
 
+    /**
+     * Returns the True Positive rate from the real world of this agent
+     * @return Returns the True Positive rate from the real world of this agent
+     */
     double getTruePositiveRate() {
        return truePositive / Main.getRealSituationCount();
     }
 
+    /**
+     * Returns the False Positive rate from the real world of this agent
+     * @return Returns the False Positive rate from the real world of this agent
+     */
     double getFalsePositiveRate() {
         return falsePositive / Main.getRealSituationCount();
     }
 
+    /**
+     * Returns the agent ID
+     * @return Returns the agent ID
+     */
     private int getAgentId() {
         return  this.agentId;
     }

@@ -1,3 +1,6 @@
+/**
+ * Implementation of "Entscheidungsfindung in einer Gruppe"
+ */
 public class Main {
     private static final int numberOfAgents = 20;
     private static final int trainingSituationCount = 2000; //how many simulations the agents should train
@@ -5,11 +8,20 @@ public class Main {
     private static final double dangerousSituation = 7.0;
     private static final double saveSituation = 4.0;
 
+    /**
+     * Starts the Program
+     * @param args Not used!
+     */
     public static void main(String[] args){
         Agent[] agents = createAgents();
         simulate(agents);
+        prettyPrint(agents);
     }
 
+    /**
+     * Simulates all training situations first. After that the real situations will be simulated.
+     * @param agents The agents the simulation will performed on
+     */
     private static void simulate(Agent[] agents) {
 
         //Train with dangerous situations
@@ -56,7 +68,13 @@ public class Main {
                 a.isDangerousBasedOnWorld(agents, false);
             }
         }
+    }
 
+    /**
+     * Prints the Information, that is gathered by the simulation onto the console
+     * @param agents The Agents that hold the information from the simulation
+     */
+    private static void prettyPrint(Agent[] agents) {
         double avgTruePositive = 0;
         double avgFalsePositive = 0;
         double avgTrainingTruePositive = 0;
@@ -67,12 +85,19 @@ public class Main {
             avgTrainingTruePositive += a.getTrainingTruePositiveRate();
             avgTrainingFalsePositive += a.getTrainingFalsePositiveRate();
         }
-        System.out.println("Avg Training True-Positive rate: " + avgTrainingTruePositive / agents.length +
-                        "\nAvg Training False-Positive rate: " + avgTrainingFalsePositive / agents.length +
-                        "\nAvg Real True-Positive rate: " + avgTruePositive / agents.length +
-                        "\nAvg Real False-Positive rate: " + avgFalsePositive / agents.length);
+        System.out.println(
+                "The avg Rates for all agents while there ignored the other agents:" +
+                "\nTrue-Positive: " + avgTrainingTruePositive / agents.length +
+                "\nFalse-Positive: " + avgTrainingFalsePositive / agents.length +
+                "\n\nThe avg Rates for all agents when they take the other agents take into account:" +
+                "\nTrue-Positive: " + avgTruePositive / agents.length +
+                "\nFalse-Positive: " + avgFalsePositive / agents.length);
     }
 
+    /**
+     * Creates all agents for the simulation
+     * @return Returns an array with all agents
+     */
     private static Agent[] createAgents() {
         Agent[] ret = new Agent[numberOfAgents];
 
@@ -83,10 +108,18 @@ public class Main {
         return ret;
     }
 
+    /**
+     * Returns the number of training situations that should be simulated
+     * @return Returns the number of training situations that should be simulated
+     */
     static int getTrainingSituationCount() {
         return trainingSituationCount;
     }
 
+    /**
+     * Returns the number of real situations that should be simulated
+     * @return Returns the number of real situations that should be simulated
+     */
     static int getRealSituationCount() {
         return realSituationCount;
     }
