@@ -29,7 +29,7 @@ class Agent {
     Agent(int agentId, int agentCount) {
         minAmountOfAgentIds = (int)((agentCount / 100.0) * minAmountOfAgentIdsInPercent);
         this.agentId = agentId;
-        this.agentsRating = new AgentMemory[agentCount];
+            this.agentsRating = new AgentMemory[agentCount];
         Arrays.fill(agentsRating, new AgentMemory());
         standardDeviation = ThreadLocalRandom.current().nextDouble(3, 5);
         threshold = ThreadLocalRandom.current().nextDouble(5.5, 8.5);
